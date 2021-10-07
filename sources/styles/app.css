@@ -56,3 +56,6 @@
 	font-size:20px;
 	vertical-align:middle;
 }
+.myHover {
+    background-color: var(--color-hover);
+}
