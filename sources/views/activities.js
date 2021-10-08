@@ -2,17 +2,19 @@ import {JetView} from "webix-jet";
 
 import constants from "../constants";
 import {contactsCollection, activitiesCollection, activityTypeCollection} from "../models/collections";
-// import EditPopupView from "./editpopup";
+import EditPopupView from "./editpopup";
 
 export default class ActivitiesView extends JetView {
 	config() {
 		const btnAdd = {
+			localId: constants.ACTIVITIES_VIEW.VIEW_IDS.BTN_SAVE_ID,
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
 			view: "button",
 			type: "button",
 			value: "Add activity",
 			click: () => {
-				this.app.callEvent(constants.EVENTS.EDIT_POPUP_VIEW.SHOW_POPUP);
+				// this.app.callEvent(constants.EVENTS.EDIT_POPUP_VIEW.SHOW_POPUP);
+				this.popup.showPopup();
 			}
 		};
 
@@ -91,7 +93,7 @@ export default class ActivitiesView extends JetView {
 					return false;
 				}
 				// "edit-datatable": () => {}
-				//	вызвать попап
+				//	this.popup.show();
 			},
 			on: {
 				onAfterSelect: (id) => {
@@ -110,7 +112,6 @@ export default class ActivitiesView extends JetView {
 					]
 				},
 				datatable
-				// EditPopupView
 			]
 		};
 
@@ -118,7 +119,8 @@ export default class ActivitiesView extends JetView {
 	}
 
 	init() {
-		// this.popup1 = this.ui(EditPopupView);
+		// this.popup = this.ui(new EditPopupView("Save"));
+		this.popup = this.ui(EditPopupView);
 		const datatable = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID);
 		webix.promise.all([
 			activitiesCollection.waitData,

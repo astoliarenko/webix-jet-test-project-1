@@ -9,7 +9,8 @@ export default {
 	},
 	ACTIVITIES_VIEW: {
 		VIEW_IDS: {
-			DATATABLE_ID: "datatableId"
+			DATATABLE_ID: "datatableId",
+			BTN_SAVE_ID: "saveInfo"
 		}
 	},
 	EDIT_POPUP_VIEW: {

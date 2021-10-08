@@ -65,8 +65,9 @@ export default class ContactsView extends JetView {
 				{
 					view: "template",
 					localId: constants.CONTACTS_VIEW.VIEW_IDS.TEMPLATE_ID,
-					template: ({FirstName, LastName, Photo, Status, Email, Skype, Job, Company}) => {
-						const photoUrl = Photo ? Photo : "./sources/img/man.png";
+					template: ({FirstName, LastName, Photo, StatusID, Email, Skype, Job, Company}) => {
+						const photoUrl = Photo || "./sources/img/man.png";
+						const Status = statusesCollection.getItem(StatusID) ? statusesCollection.getItem(StatusID).Value : "unknown";
 						// need to add icons into column2
 						const res = `
 							<div class='details_container'>

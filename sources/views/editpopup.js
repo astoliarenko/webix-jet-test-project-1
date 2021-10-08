@@ -4,18 +4,13 @@ import constants from "../constants";
 import {contactsCollection, activityTypeCollection} from "../models/collections";
 
 export default class EditPopupView extends JetView {
-	constructor(action) {
-		super();
-		this.action = action;
-	}
-
 	config() {
-		const btnAdd = {
-			view: "button",
-			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_ADD_ID,
-			value: "Add"
-			// click: clearForm,
-		};
+		// const btnAdd = {
+		// 	view: "button",
+		// 	localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_ADD_ID,
+		// 	value: "Add"
+		// 	// click: clearForm,
+		// };
 
 		const btnSave = {
 			view: "button",
@@ -82,7 +77,8 @@ export default class EditPopupView extends JetView {
 						checkbox,
 						{
 							cols: [
-								(this.action === "Save") ? btnSave : btnAdd,
+								// (this.action === "Save") ? btnSave : btnAdd,
+								btnSave,
 								btnCancel
 							]
 						}
@@ -105,10 +101,16 @@ export default class EditPopupView extends JetView {
 		this.getRoot().show();
 	}
 
-	init() {
-		this.on(this.app, constants.EVENTS.EDIT_POPUP_VIEW.SHOW_POPUP, () => {
-			// console.log("show popup");
-			this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.POPUP_ID).show();
-		});
+	setAction(action) {
+		if (action === "Edit") {
+			console.log("param");
+		}
 	}
+
+	// init() {
+	// 	this.on(this.app, constants.EVENTS.EDIT_POPUP_VIEW.SHOW_POPUP, () => {
+	// 		// console.log("show popup");
+	// 		this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.POPUP_ID).show();
+	// 	});
+	// }
 }
