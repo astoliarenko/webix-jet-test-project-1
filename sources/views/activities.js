@@ -22,15 +22,20 @@ export default class ActivitiesView extends JetView {
 			localId: constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID,
 			columns: [
 				{
-					id: "checkbox",
-					header: "",
-					css: "rank head_row cell-border-right",
+					id: "checked",
+					header: [{content: "masterCheckbox"}],
+					template: "{common.checkbox()}",
 					width: 50
 				},
 				{
 					id: "TypeID",
+					// name: "TypeID",
 					header: ["Activity type", {content: "selectFilter"}],
-					template: "#TypeID#",
+					// template: "#TypeID#",
+					template: (obj) => {
+						const id = obj.TypeID;
+						return activityTypeCollection.getItem(id).Value;
+					},
 					collection: activityTypeCollection
 				},
 				{
@@ -44,13 +49,21 @@ export default class ActivitiesView extends JetView {
 				},
 				{
 					id: "Details",
-					header: ["Details", {content: "textFilter"}],
+					// name: "Details",
 					template: "#Details#",
+					header: ["Details", {content: "textFilter"}],
 					collection: activitiesCollection,
 					fillspace: true
 				},
 				{
 					id: "ContactID",
+					// name: "ContactID",
+					// width: auto,
+					// template: "#ContactID#",
+					template: (obj) => {
+						const contact = contactsCollection.getItem(obj.ContactID);
+						return `${contact.FirstName} ${contact.LastName}`;
+					},
 					header: ["Contact", {content: "selectFilter"}],
 					collection: contactsCollection
 				},
@@ -59,20 +72,21 @@ export default class ActivitiesView extends JetView {
 					header: "",
 					css: "rank",
 					template:
-					"<span class ='webix_icon wxi-pencil edit-datatable'></span>"
+					`<span class ='webix_icon wxi-pencil ${constants.CSS.ACTIVITIES_VIEW.EDIT_DATATABLE}'></span>`
 				},
 				{
 					id: "delete",
 					header: "",
 					css: "rank",
 					template:
-					"<span class ='webix_icon wxi-trash remove-item-datatable'></span>"
+					`<span class ='webix_icon wxi-trash ${constants.CSS.ACTIVITIES_VIEW.REMOVE_ITEM_DATATABLE}'></span>`
 				}
 			],
 			scrollX: false,
 			select: true,
 			onClick: {
 				"remove-item-datatable": function (e, id) {
+				// constants.CSS.ACTIVITIES_VIEW.REMOVE_ITEM_DATATABLE: function (e, id) {
 					activitiesCollection.remove(id);
 					return false;
 				}
@@ -80,15 +94,16 @@ export default class ActivitiesView extends JetView {
 				//	вызвать попап
 			},
 			on: {
-				// onItemClick: (item) => {
-				// 	console.log("id=", item.row);
-				// }
+				onAfterSelect: (id) => {
+					this.show(`/top/activities?id=${id}`);
+				}
 			}
 		};
 
 		const ui = {
 			rows: [
 				{
+					css: "bg-white",
 					cols: [
 						{},
 						btnAdd

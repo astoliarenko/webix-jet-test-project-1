@@ -26,5 +26,11 @@ export default {
 		EDIT_POPUP_VIEW: {
 			SHOW_POPUP: "showEditPopup"
 		}
+	},
+	CSS: {
+		ACTIVITIES_VIEW: {
+			EDIT_DATATABLE: "edit-datatable",
+			REMOVE_ITEM_DATATABLE: "remove-item-datatable"
+		}
 	}
 };
