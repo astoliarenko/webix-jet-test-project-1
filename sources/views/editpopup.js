@@ -22,8 +22,10 @@ export default class EditPopupView extends JetView {
 		const btnCancel = {
 			view: "button",
 			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_CANCEL_ID,
-			value: "Cancel"
-			// click: clearForm,
+			value: "Cancel",
+			click: () => {
+				this.getRoot().hide();
+			}
 		};
 
 		const checkbox = {
@@ -61,16 +63,19 @@ export default class EditPopupView extends JetView {
 						{
 							cols: [
 								{
-									view: "calendar",
-									date: new Date(2015, 3, 16),
-									events: webix.Date.isHoliday,
-									weekHeader: true
+									view: "datepicker",
+									value: "",
+									label: "Date",
+									timepicker: true,
+									width: 300
 								},
 								{
-									view: "calendar",
-									date: new Date(2015, 3, 16),
-									events: webix.Date.isHoliday,
-									weekHeader: true
+									view: "datepicker",
+									value: "",
+									type: "time",
+									label: "Time",
+									timepicker: true,
+									width: 300
 								}
 							]
 						},
@@ -84,16 +89,14 @@ export default class EditPopupView extends JetView {
 						}
 					]
 				}
-
 			]
 		};
 
 		return {
 			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.POPUP_ID,
 			view: "popup",
-			top: 200,
-			left: 300,
-			body: {form}
+			position: "center",
+			body: form
 		};
 	}
 
@@ -101,11 +104,11 @@ export default class EditPopupView extends JetView {
 		this.getRoot().show();
 	}
 
-	setAction(action) {
-		if (action === "Edit") {
-			console.log("param");
-		}
-	}
+	// setAction(action) {
+	// 	if (action === "Edit") {
+	// 		console.log("param");
+	// 	}
+	// }
 
 	// init() {
 	// 	this.on(this.app, constants.EVENTS.EDIT_POPUP_VIEW.SHOW_POPUP, () => {
