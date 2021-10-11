@@ -12,8 +12,6 @@ export default class ContactsView extends JetView {
 			width: constants.CONTACTS_VIEW.LIST_WIDTH,
 			select: true,
 			template: ({FirstName, LastName, Photo, Company}) => {
-			// template: (obj) => {
-				// console.log(obj);
 				const photoUrl = Photo || "./sources/img/man.png";
 				const res = `
 					<div class='item-list_container'>
@@ -26,14 +24,11 @@ export default class ContactsView extends JetView {
 						</div>
 					</div>
 				`;
-				// const res = `${obj.FirstName} ${obj.LastName}`;
-				// const res = `${FirstName} ${LastName}`;
 				return res;
 			},
 			on: {
 				onItemClick: (id) => {
 					const item = contactsCollection.getItem(id);
-					//	this.app.callEvent("select", [item]);
 					this.$$(constants.CONTACTS_VIEW.VIEW_IDS.LIST_ID).select(id);
 					this.$$(constants.CONTACTS_VIEW.VIEW_IDS.TEMPLATE_ID).parse(item);
 					this.setParam("id", id, true);
@@ -62,9 +57,11 @@ export default class ContactsView extends JetView {
 				{
 					view: "template",
 					localId: constants.CONTACTS_VIEW.VIEW_IDS.TEMPLATE_ID,
-					template: ({FirstName, LastName, Photo, StatusID, Email, Skype, Job, Company, Birthday}) => {
+					template: ({FirstName, LastName, Photo, StatusID,
+						Email, Skype, Job, Company, Birthday}) => {
 						const photoUrl = Photo || "./sources/img/man.png";
-						const Status = statusesCollection.getItem(StatusID) ? statusesCollection.getItem(StatusID).Value : "unknown";
+						const item = statusesCollection.getItem(StatusID);
+						const Status = item ? item.Value : "unknown";
 						// need to add icons into column2
 						const res = `
 							<div class='details_container df f-d-col'>
@@ -84,7 +81,7 @@ export default class ContactsView extends JetView {
 								</div>
 							</div>
 						`;
-						// date of birth, location
+						//  need to add location
 						return res;
 					}
 				},

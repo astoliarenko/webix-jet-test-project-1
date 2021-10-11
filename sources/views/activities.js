@@ -27,8 +27,10 @@ export default class ActivitiesView extends JetView {
 			localId: constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID,
 			columns: [
 				{
-					id: "checked",
-					header: [{content: "masterCheckbox"}],
+					id: "State",
+					checkValue: "Close",
+					uncheckValue: "Open",
+					header: "",
 					template: "{common.checkbox()}",
 					width: 50
 				},

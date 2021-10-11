@@ -1,7 +1,7 @@
 import {JetView} from "webix-jet";
 
 import constants from "../constants";
-import {contactsCollection, activityTypeCollection} from "../models/collections";
+import {contactsCollection, activityTypeCollection, activitiesCollection} from "../models/collections";
 
 export default class EditPopupView extends JetView {
 	config() {
@@ -9,9 +9,23 @@ export default class EditPopupView extends JetView {
 			view: "button",
 			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_SAVE_ID,
 			label: "",
-			css: "webix_primary"
-			// value: "Save"
-			// click: clearForm,
+			css: "webix_primary",
+			click: () => {
+				const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
+
+				const formValues = form.getValues();
+				if (form.validate() && form.isDirty()) {
+					if (formValues.id) {
+						activitiesCollection.updateItem(formValues.id, formValues);
+					}
+					else activitiesCollection.add(formValues);
+				}
+
+
+				form.clear();
+				form.clearValidation();
+				this.getRoot().hide();
+			}
 		};
 
 		const btnCancel = {
@@ -30,7 +44,9 @@ export default class EditPopupView extends JetView {
 			view: "checkbox",
 			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.CHECKBOX_ID,
 			label: "Completed",
-			value: 1
+			name: "State",
+			checkValue: "Close",
+			uncheckValue: "Open"
 		};
 
 		const form = {
@@ -49,8 +65,7 @@ export default class EditPopupView extends JetView {
 							view: "textarea",
 							label: "Details",
 							id: "inpDetails",
-							name: "Details",
-							invalidMessage: "Cannot be empty"
+							name: "Details"
 						},
 						{
 							view: "richselect",
@@ -79,6 +94,7 @@ export default class EditPopupView extends JetView {
 								{
 									view: "datepicker",
 									value: "",
+									name: "Time",
 									type: "time",
 									label: "Time",
 									timepicker: true,
@@ -97,7 +113,8 @@ export default class EditPopupView extends JetView {
 				}
 			],
 			rules: {
-				// do not forget about rules
+				TypeID: webix.rules.isNotEmpty,
+				ContactID: webix.rules.isNotEmpty
 			}
 		};
 
