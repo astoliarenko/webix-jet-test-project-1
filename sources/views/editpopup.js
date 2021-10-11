@@ -5,17 +5,12 @@ import {contactsCollection, activityTypeCollection} from "../models/collections"
 
 export default class EditPopupView extends JetView {
 	config() {
-		// const btnAdd = {
-		// 	view: "button",
-		// 	localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_ADD_ID,
-		// 	value: "Add"
-		// 	// click: clearForm,
-		// };
-
 		const btnSave = {
 			view: "button",
 			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_SAVE_ID,
-			value: "Save"
+			label: "",
+			css: "webix_primary"
+			// value: "Save"
 			// click: clearForm,
 		};
 
@@ -24,6 +19,9 @@ export default class EditPopupView extends JetView {
 			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_CANCEL_ID,
 			value: "Cancel",
 			click: () => {
+				const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
+				form.clear();
+				form.clearValidation();
 				this.getRoot().hide();
 			}
 		};
@@ -42,29 +40,38 @@ export default class EditPopupView extends JetView {
 				{
 					rows: [
 						{
-							view: "text",
+							localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.HEADER_ID,
+							view: "template",
+							template: "",
+							type: "header"
+						},
+						{
+							view: "textarea",
 							label: "Details",
 							id: "inpDetails",
 							name: "Details",
-							invalidMessage: "Title must not be empty"
+							invalidMessage: "Cannot be empty"
 						},
 						{
 							view: "richselect",
 							label: "Type",
 							name: "TypeID",
-							options: activityTypeCollection
+							options: activityTypeCollection,
+							invalidMessage: "Cannot be empty"
 						},
 						{
 							view: "richselect",
 							label: "Contact",
 							name: "ContactID",
-							options: contactsCollection
+							options: contactsCollection,
+							invalidMessage: "Cannot be empty"
 						},
 						{
 							cols: [
 								{
 									view: "datepicker",
 									value: "",
+									name: "DueDate",
 									label: "Date",
 									timepicker: true,
 									width: 300
@@ -82,14 +89,16 @@ export default class EditPopupView extends JetView {
 						checkbox,
 						{
 							cols: [
-								// (this.action === "Save") ? btnSave : btnAdd,
 								btnSave,
 								btnCancel
 							]
 						}
 					]
 				}
-			]
+			],
+			rules: {
+				// do not forget about rules
+			}
 		};
 
 		return {
@@ -100,20 +109,29 @@ export default class EditPopupView extends JetView {
 		};
 	}
 
-	showPopup() {
+	showPopup(activity) {
+		const header = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.HEADER_ID);
+		const btnSave = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_SAVE_ID);
+
+		const headerText = activity ? "Edit activity" : "Add activity";
+		const btnName = activity ? "Save" : "Add";
+
+		header.define("template", headerText);
+		btnSave.define("label", btnName);
+		// header.config.template = headerText;
+		// btnSave.config.label = btnName;
+		header.refresh();
+		btnSave.refresh();
+
+		const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
+		if (activity) {
+			form.setValues(activity);
+		}
+		else {
+			form.clear();
+			form.clearValidation();
+		}
+
 		this.getRoot().show();
 	}
-
-	// setAction(action) {
-	// 	if (action === "Edit") {
-	// 		console.log("param");
-	// 	}
-	// }
-
-	// init() {
-	// 	this.on(this.app, constants.EVENTS.EDIT_POPUP_VIEW.SHOW_POPUP, () => {
-	// 		// console.log("show popup");
-	// 		this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.POPUP_ID).show();
-	// 	});
-	// }
 }

@@ -11,7 +11,8 @@ export default {
 		VIEW_IDS: {
 			DATATABLE_ID: "datatableId",
 			BTN_SAVE_ID: "saveInfo"
-		}
+		},
+		DATE_FORMAT: "%Y-%m-%d"
 	},
 	EDIT_POPUP_VIEW: {
 		VIEW_IDS: {
@@ -20,7 +21,8 @@ export default {
 			BTN_ADD_ID: "popupBtnAddId",
 			BTN_SAVE_ID: "popupBtnSaveId",
 			BTN_CANCEL_ID: "popupBtnCancelId",
-			CHECKBOX_ID: "popupCheckboxId"
+			CHECKBOX_ID: "popupCheckboxId",
+			HEADER_ID: "popupHeader"
 		}
 	},
 	EVENTS: {

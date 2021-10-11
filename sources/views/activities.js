@@ -18,7 +18,7 @@ export default class ActivitiesView extends JetView {
 			}
 		};
 
-		const xmlFormat = webix.Date.strToDate("%Y-%m-%d");
+		// const myFormat = webix.Date.strToDate("%Y-%m-%d");
 		// const xmlFormat = webix.Date.strToDate("%d.%m.%Y");
 
 		const datatable = {
@@ -34,24 +34,22 @@ export default class ActivitiesView extends JetView {
 				},
 				{
 					id: "TypeID",
-					// name: "TypeID",
 					header: ["Activity type", {content: "selectFilter"}],
-					// template: "#TypeID#",
-					template: (obj) => {
-						const id = obj.TypeID;
-						return activityTypeCollection.getItem(id).Value;
-					},
+					// template: (obj) => {
+					// 	const id = obj.TypeID;
+					// 	return activityTypeCollection.getItem(id).Value;
+					// },
 					collection: activityTypeCollection
 				},
 				{
 					id: "DueDate",
 					header: ["Due date", {content: "dateFilter"}],
-					format: webix.i18n.dateFormatStr,
-					template: obj => obj.DueDate
+					format: webix.Date.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT),
+					sort: "date"
+					// template: obj => obj.DueDate
 				},
 				{
 					id: "Details",
-					// name: "Details",
 					template: "#Details#",
 					header: ["Details", {content: "textFilter"}],
 					collection: activitiesCollection,
@@ -60,17 +58,11 @@ export default class ActivitiesView extends JetView {
 				{
 					id: "ContactID",
 					width: 150,
-					// name: "ContactID",
-					// width: auto,
-					// template: "#ContactID#",
-					template: (obj) => {
-						// console.log(obj);
-						// console.log(contactsCollection.data.pull);
-						const contact = contactsCollection.getItem(obj.ContactID);
-						return `${contact.FirstName} ${contact.LastName}`;
-					},
+					// template: (obj) => {
+					// 	const contact = contactsCollection.getItem(obj.ContactID);
+					// 	return `${contact.FirstName} ${contact.LastName}`;
+					// },
 					header: ["Contact", {content: "selectFilter"}],
-					// header: ["Contact", {content: "selectFilter", template: (obj) = {console.log(obj)}}],
 					collection: contactsCollection
 				},
 				{
@@ -93,12 +85,17 @@ export default class ActivitiesView extends JetView {
 			onClick: {
 				"remove-item-datatable": (e, id) => {
 				// constants.CSS.ACTIVITIES_VIEW.REMOVE_ITEM_DATATABLE: function (e, id) {
-					activitiesCollection.remove(id);
+					webix.confirm("Delete this activitiy?").then(() => {
+						activitiesCollection.remove(id);
+					});
 					return false;
 				},
 				// constants.CSS.ACTIVITIES_VIEW.REMOVE_ITEM_DATATABLE: () => {
-				"edit-datatable": () => {
-					this.popup.showPopup();
+				"edit-datatable": (e, id) => {
+					const item = activitiesCollection.getItem(id);
+					this.popup.showPopup(item);
+					console.log(item);
+					// this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID).parse(item);
 				}
 			},
 			on: {
@@ -112,7 +109,8 @@ export default class ActivitiesView extends JetView {
 					// const date = obj.DueDate.substring(0, 9);
 					// console.log(date);
 					// obj.DueDate = xmlFormat(obj.DueDate);
-					obj.DueDate = transformToDataObj(obj.DueDate);
+					// obj.DueDate = transformToDataObj(obj.DueDate);
+					obj.DueDate = webix.Date.strToDate(constants.ACTIVITIES_VIEW.DATE_FORMAT)(obj.DueDate);
 				}
 			}
 		};
@@ -147,14 +145,4 @@ export default class ActivitiesView extends JetView {
 			// console.log(datatable.data.pull);
 		});
 	}
-}
-
-export function transformToDataObj(date) {
-	const year = date.substring(0, 4);
-	const month = date.substring(5, 7);
-	const day = date.substring(8, 10);
-	const hours = date.substring(11, 13);
-	const minutes = date.substring(14);
-	const newDate = new Date(year, month, day, hours, minutes);
-	return newDate;
 }
