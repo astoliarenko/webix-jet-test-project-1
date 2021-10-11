@@ -5,38 +5,36 @@ import {contactsCollection, activityTypeCollection, activitiesCollection} from "
 
 export default class EditPopupView extends JetView {
 	config() {
-		function saveActivity() {
-			const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
-			const formValues = form.getValues();
-			if (form.validate() && form.isDirty()) {
-				const date = formValues.DueDate;
-				if (date) {
-					date.setHours(formValues.Time.getHours());
-					date.setMinutes(formValues.Time.getMinutes());
-				}
-				// Удаляю ключ тайм, который создавал при вызове метода ShowPopup()
-				delete formValues.Time;
-				formValues.DueDate = webix.Date
-					.dateToStr(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
-
-				if (formValues.id) {
-					activitiesCollection.updateItem(formValues.id, formValues);
-				}
-				else activitiesCollection.add(formValues);
-			}
-			else return;
-
-			form.clear();
-			form.clearValidation();
-			this.getRoot().hide();
-		}
-
 		const btnSave = {
 			view: "button",
 			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_SAVE_ID,
 			label: "",
 			css: "webix_primary",
-			click: saveActivity
+			click: () => {
+				const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
+				const formValues = form.getValues();
+				if (form.validate() && form.isDirty()) {
+					const date = formValues.DueDate;
+					if (date) {
+						date.setHours(formValues.Time.getHours());
+						date.setMinutes(formValues.Time.getMinutes());
+					}
+					// Удаляю ключ тайм, который создавал при вызове метода ShowPopup()
+					delete formValues.Time;
+					formValues.DueDate = webix.Date
+						.dateToStr(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
+
+					if (formValues.id) {
+						activitiesCollection.updateItem(formValues.id, formValues);
+					}
+					else activitiesCollection.add(formValues);
+				}
+				else return;
+
+				form.clear();
+				form.clearValidation();
+				this.getRoot().hide();
+			}
 		};
 
 		const btnCancel = {

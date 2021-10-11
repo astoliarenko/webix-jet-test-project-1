@@ -1,3 +1,5 @@
+import constants from "../constants";
+
 export const contactsCollection = new webix.DataCollection({
 	url: "http://localhost:8096/api/v1/contacts/",
 	// save: "rest->http://localhost:8096/api/v1/contacts/"
@@ -16,7 +18,12 @@ export const statusesCollection = new webix.DataCollection({
 
 export const activitiesCollection = new webix.DataCollection({
 	url: "http://localhost:8096/api/v1/activities/",
-	save: "rest->http://localhost:8096/api/v1/activities/"
+	save: "rest->http://localhost:8096/api/v1/activities/",
+	scheme: {
+		$init(obj) {
+			obj.DueDate = webix.Date.strToDate(constants.ACTIVITIES_VIEW.DATE_FORMAT)(obj.DueDate);
+		}
+	}
 });
 
 export const activityTypeCollection = new webix.DataCollection({

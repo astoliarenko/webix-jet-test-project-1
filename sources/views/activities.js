@@ -116,11 +116,11 @@ export default class ActivitiesView extends JetView {
 					this.show(`/top/activities?id=${id}`);
 				}
 			},
-			scheme: {
-				$init(obj) {
-					obj.DueDate = webix.Date.strToDate(constants.ACTIVITIES_VIEW.DATE_FORMAT)(obj.DueDate);
-				}
-			}
+			// scheme: {
+			// 	$init(obj) {
+			// 		obj.DueDate = webix.Date.strToDate(constants.ACTIVITIES_VIEW.DATE_FORMAT)(obj.DueDate);
+			// 	}
+			// }
 		};
 
 		const ui = {
