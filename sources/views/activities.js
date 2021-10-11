@@ -6,6 +6,10 @@ import EditPopupView from "./editpopup";
 
 export default class ActivitiesView extends JetView {
 	config() {
+		const datepickerWidth = 150;
+		const stateWidth = 50;
+		const contactWidth = 150;
+
 		const btnAdd = {
 			localId: constants.ACTIVITIES_VIEW.VIEW_IDS.BTN_SAVE_ID,
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
@@ -13,13 +17,9 @@ export default class ActivitiesView extends JetView {
 			type: "button",
 			value: "Add activity",
 			click: () => {
-				// this.app.callEvent(constants.EVENTS.EDIT_POPUP_VIEW.SHOW_POPUP);
 				this.popup.showPopup();
 			}
 		};
-
-		// const myFormat = webix.Date.strToDate("%Y-%m-%d");
-		// const xmlFormat = webix.Date.strToDate("%d.%m.%Y");
 
 		const datatable = {
 			view: "datatable",
@@ -32,7 +32,7 @@ export default class ActivitiesView extends JetView {
 					uncheckValue: "Open",
 					header: "",
 					template: "{common.checkbox()}",
-					width: 50
+					width: stateWidth
 				},
 				{
 					id: "TypeID",
@@ -43,12 +43,25 @@ export default class ActivitiesView extends JetView {
 					// },
 					collection: activityTypeCollection
 				},
+				// {
+				// 	id: "DueDate",
+				// 	header: ["Due date", {content: "dateFilter"}],
+				// 	format: webix.Date.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT),
+				// 	sort: "date"
+				// 	// template: obj => obj.DueDate
+				// },
 				{
 					id: "DueDate",
-					header: ["Due date", {content: "dateFilter"}],
+					width: datepickerWidth,
+					header: [
+						"Due date",
+						{
+							content: "datepickerFilter",
+							inputConfig: {format: webix.Date.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)}
+						}
+					],
 					format: webix.Date.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT),
 					sort: "date"
-					// template: obj => obj.DueDate
 				},
 				{
 					id: "Details",
@@ -59,7 +72,7 @@ export default class ActivitiesView extends JetView {
 				},
 				{
 					id: "ContactID",
-					width: 150,
+					width: contactWidth,
 					// template: (obj) => {
 					// 	const contact = contactsCollection.getItem(obj.ContactID);
 					// 	return `${contact.FirstName} ${contact.LastName}`;
@@ -96,8 +109,6 @@ export default class ActivitiesView extends JetView {
 				"edit-datatable": (e, id) => {
 					const item = activitiesCollection.getItem(id);
 					this.popup.showPopup(item);
-					console.log(item);
-					// this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID).parse(item);
 				}
 			},
 			on: {
@@ -107,11 +118,6 @@ export default class ActivitiesView extends JetView {
 			},
 			scheme: {
 				$init(obj) {
-					// console.log("datetetetete");
-					// const date = obj.DueDate.substring(0, 9);
-					// console.log(date);
-					// obj.DueDate = xmlFormat(obj.DueDate);
-					// obj.DueDate = transformToDataObj(obj.DueDate);
 					obj.DueDate = webix.Date.strToDate(constants.ACTIVITIES_VIEW.DATE_FORMAT)(obj.DueDate);
 				}
 			}
@@ -144,7 +150,6 @@ export default class ActivitiesView extends JetView {
 		]).then(() => {
 			datatable.sync(activitiesCollection);
 			// console.log(activitiesCollection.data.pull);
-			// console.log(datatable.data.pull);
 		});
 	}
 }

@@ -12,14 +12,26 @@ export default class EditPopupView extends JetView {
 			css: "webix_primary",
 			click: () => {
 				const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
-
 				const formValues = form.getValues();
 				if (form.validate() && form.isDirty()) {
+					const date = formValues.DueDate;
+					if (date) {
+						date.setHours(formValues.Time.getHours());
+						date.setMinutes(formValues.Time.getMinutes());
+					}
+					// Удаляю ключ тайм, который создавал при вызове метода ShowPopup()
+					delete formValues.Time;
+					formValues.DueDate = webix.Date.dateToStr(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
+					console.log(formValues.Time);
+
 					if (formValues.id) {
 						activitiesCollection.updateItem(formValues.id, formValues);
 					}
 					else activitiesCollection.add(formValues);
+					console.log("new item = ", formValues);
+					console.log("collection activities  after add or update= ", activitiesCollection.data.pull);
 				}
+				else return;
 
 
 				form.clear();
@@ -68,6 +80,7 @@ export default class EditPopupView extends JetView {
 							name: "Details"
 						},
 						{
+							id: "TypeID",
 							view: "richselect",
 							label: "Type",
 							name: "TypeID",
@@ -75,6 +88,7 @@ export default class EditPopupView extends JetView {
 							invalidMessage: "Cannot be empty"
 						},
 						{
+							id: "ContactID",
 							view: "richselect",
 							label: "Contact",
 							name: "ContactID",
@@ -88,8 +102,9 @@ export default class EditPopupView extends JetView {
 									value: "",
 									name: "DueDate",
 									label: "Date",
-									timepicker: true,
-									width: 300
+									width: 300,
+									timepicker: false,
+									format: webix.Date.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)
 								},
 								{
 									view: "datepicker",
@@ -97,8 +112,9 @@ export default class EditPopupView extends JetView {
 									name: "Time",
 									type: "time",
 									label: "Time",
-									timepicker: true,
-									width: 300
+									// timepicker: true,
+									width: 300,
+									format: webix.Date.dateToStr(constants.ACTIVITIES_VIEW.TIME_FORMAT)
 								}
 							]
 						},
@@ -129,9 +145,10 @@ export default class EditPopupView extends JetView {
 	showPopup(activity) {
 		const header = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.HEADER_ID);
 		const btnSave = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_SAVE_ID);
-
+		const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
 		const headerText = activity ? "Edit activity" : "Add activity";
 		const btnName = activity ? "Save" : "Add";
+		// const activityCopy = Object.assign({}, activity);
 
 		header.define("template", headerText);
 		btnSave.define("label", btnName);
@@ -140,8 +157,13 @@ export default class EditPopupView extends JetView {
 		header.refresh();
 		btnSave.refresh();
 
-		const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
 		if (activity) {
+			activity.DueDate = webix.Date.strToDate(constants.ACTIVITIES_VIEW.DATE_FORMAT)(activity.DueDate);
+			// console.log(activitiesCollection.data.pull);
+
+			activity.Time = activity.DueDate;
+			// activity.Time = webix.Date.strToDate(constants.ACTIVITIES_VIEW.DATE_FORMAT)(activity.DueDate);
+			console.log("activity time", activity.Time);
 			form.setValues(activity);
 		}
 		else {

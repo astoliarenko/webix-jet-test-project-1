@@ -12,7 +12,9 @@ export default {
 			DATATABLE_ID: "datatableId",
 			BTN_SAVE_ID: "saveInfo"
 		},
-		DATE_FORMAT: "%Y-%m-%d"
+		DATE_FORMAT: "%Y-%m-%d",
+		TIME_FORMAT: "%H:%i",
+		DATE_SERVER_FORMAT: "%Y-%m-%d %H:%i"
 	},
 	EDIT_POPUP_VIEW: {
 		VIEW_IDS: {

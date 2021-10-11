@@ -4,6 +4,7 @@ export const contactsCollection = new webix.DataCollection({
 	scheme: {
 		$init: (obj) => {
 			obj.value = `${obj.FirstName} ${obj.LastName}`;
+			// was created new key "value", but it mb necessary to delete old one ("Value")
 		}
 	}
 });
@@ -14,8 +15,8 @@ export const statusesCollection = new webix.DataCollection({
 });
 
 export const activitiesCollection = new webix.DataCollection({
-	url: "http://localhost:8096/api/v1/activities/"
-	// save: "rest->http://localhost:8096/api/v1/countries/"
+	url: "http://localhost:8096/api/v1/activities/",
+	save: "rest->http://localhost:8096/api/v1/activities/"
 });
 
 export const activityTypeCollection = new webix.DataCollection({
