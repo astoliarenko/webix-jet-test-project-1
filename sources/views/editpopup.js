@@ -5,39 +5,38 @@ import {contactsCollection, activityTypeCollection, activitiesCollection} from "
 
 export default class EditPopupView extends JetView {
 	config() {
+		function saveActivity() {
+			const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
+			const formValues = form.getValues();
+			if (form.validate() && form.isDirty()) {
+				const date = formValues.DueDate;
+				if (date) {
+					date.setHours(formValues.Time.getHours());
+					date.setMinutes(formValues.Time.getMinutes());
+				}
+				// Удаляю ключ тайм, который создавал при вызове метода ShowPopup()
+				delete formValues.Time;
+				formValues.DueDate = webix.Date
+					.dateToStr(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
+
+				if (formValues.id) {
+					activitiesCollection.updateItem(formValues.id, formValues);
+				}
+				else activitiesCollection.add(formValues);
+			}
+			else return;
+
+			form.clear();
+			form.clearValidation();
+			this.getRoot().hide();
+		}
+
 		const btnSave = {
 			view: "button",
 			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_SAVE_ID,
 			label: "",
 			css: "webix_primary",
-			click: () => {
-				const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
-				const formValues = form.getValues();
-				if (form.validate() && form.isDirty()) {
-					const date = formValues.DueDate;
-					if (date) {
-						date.setHours(formValues.Time.getHours());
-						date.setMinutes(formValues.Time.getMinutes());
-					}
-					// Удаляю ключ тайм, который создавал при вызове метода ShowPopup()
-					delete formValues.Time;
-					formValues.DueDate = webix.Date.dateToStr(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
-					console.log(formValues.Time);
-
-					if (formValues.id) {
-						activitiesCollection.updateItem(formValues.id, formValues);
-					}
-					else activitiesCollection.add(formValues);
-					console.log("new item = ", formValues);
-					console.log("collection activities  after add or update= ", activitiesCollection.data.pull);
-				}
-				else return;
-
-
-				form.clear();
-				form.clearValidation();
-				this.getRoot().hide();
-			}
+			click: saveActivity
 		};
 
 		const btnCancel = {
@@ -148,7 +147,7 @@ export default class EditPopupView extends JetView {
 		const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
 		const headerText = activity ? "Edit activity" : "Add activity";
 		const btnName = activity ? "Save" : "Add";
-		// const activityCopy = Object.assign({}, activity);
+		const activityCopy = Object.assign({}, activity);
 
 		header.define("template", headerText);
 		btnSave.define("label", btnName);
@@ -157,14 +156,13 @@ export default class EditPopupView extends JetView {
 		header.refresh();
 		btnSave.refresh();
 
-		if (activity) {
-			activity.DueDate = webix.Date.strToDate(constants.ACTIVITIES_VIEW.DATE_FORMAT)(activity.DueDate);
-			// console.log(activitiesCollection.data.pull);
+		if (activityCopy) {
+			activityCopy.DueDate = webix.Date
+				.strToDate(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(activityCopy.DueDate);
 
-			activity.Time = activity.DueDate;
-			// activity.Time = webix.Date.strToDate(constants.ACTIVITIES_VIEW.DATE_FORMAT)(activity.DueDate);
-			console.log("activity time", activity.Time);
-			form.setValues(activity);
+			activityCopy.Time = activityCopy.DueDate;
+			// console.log("activity time", activityCopy.Time);
+			form.setValues(activityCopy);
 		}
 		else {
 			form.clear();
