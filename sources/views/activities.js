@@ -1,13 +1,16 @@
 import {JetView} from "webix-jet";
 
 import constants from "../constants";
-import {contactsCollection, activitiesCollection, activityTypeCollection} from "../models/collections";
+import activitiesCollection from "../models/activitiesCollection";
+import activityTypeCollection from "../models/activityTypeCollection";
+import contactsCollection from "../models/contactsСollections";
 import EditPopupView from "./editpopup";
 
 export default class ActivitiesView extends JetView {
 	config() {
 		const datepickerWidth = 150;
 		const stateWidth = 50;
+		const iconColumnWidth = 50;
 		const contactWidth = 150;
 
 		const btnAdd = {
@@ -41,7 +44,8 @@ export default class ActivitiesView extends JetView {
 					// 	const id = obj.TypeID;
 					// 	return activityTypeCollection.getItem(id).Value;
 					// },
-					collection: activityTypeCollection
+					collection: activityTypeCollection,
+					sort: "string"
 				},
 				// {
 				// 	id: "DueDate",
@@ -67,8 +71,9 @@ export default class ActivitiesView extends JetView {
 					id: "Details",
 					template: "#Details#",
 					header: ["Details", {content: "textFilter"}],
-					collection: activitiesCollection,
-					fillspace: true
+					// collection: activitiesCollection,
+					fillspace: true,
+					sort: "string"
 				},
 				{
 					id: "ContactID",
@@ -78,19 +83,20 @@ export default class ActivitiesView extends JetView {
 					// 	return `${contact.FirstName} ${contact.LastName}`;
 					// },
 					header: ["Contact", {content: "selectFilter"}],
-					collection: contactsCollection
+					collection: contactsCollection,
+					sort: "string"
 				},
 				{
 					id: "edit",
+					width: iconColumnWidth,
 					header: "",
-					css: "rank",
 					template:
 					`<span class ='webix_icon wxi-pencil ${constants.CSS.ACTIVITIES_VIEW.EDIT_DATATABLE}'></span>`
 				},
 				{
 					id: "delete",
 					header: "",
-					css: "rank",
+					width: iconColumnWidth,
 					template:
 					`<span class ='webix_icon wxi-trash ${constants.CSS.ACTIVITIES_VIEW.REMOVE_ITEM_DATATABLE}'></span>`
 				}
@@ -100,22 +106,26 @@ export default class ActivitiesView extends JetView {
 			onClick: {
 				"remove-item-datatable": (e, id) => {
 				// constants.CSS.ACTIVITIES_VIEW.REMOVE_ITEM_DATATABLE: function (e, id) {
-					webix.confirm("Delete this activitiy?").then(() => {
+					webix.confirm("Delete this activity?").then(() => {
 						activitiesCollection.remove(id);
 					});
 					return false;
 				},
 				// constants.CSS.ACTIVITIES_VIEW.REMOVE_ITEM_DATATABLE: () => {
+				// "edit-datatable": (e, id) => {
+				// 	const item = activitiesCollection.getItem(id);
+				// 	this.popup.showPopup(item);
+				// }
 				"edit-datatable": (e, id) => {
-					const item = activitiesCollection.getItem(id);
-					this.popup.showPopup(item);
+					if (id) this.popup.showPopup(id);
+					else return false;
 				}
 			},
 			on: {
 				onAfterSelect: (id) => {
 					this.show(`/top/activities?id=${id}`);
 				}
-			},
+			}
 			// scheme: {
 			// 	$init(obj) {
 			// 		obj.DueDate = webix.Date.strToDate(constants.ACTIVITIES_VIEW.DATE_FORMAT)(obj.DueDate);

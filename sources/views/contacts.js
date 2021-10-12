@@ -1,7 +1,8 @@
 import {JetView} from "webix-jet";
 
 import constants from "../constants";
-import {contactsCollection, statusesCollection} from "../models/collections";
+import contactsCollection from "../models/contactsСollections";
+import statusesCollection from "../models/statusesCollection";
 
 export default class ContactsView extends JetView {
 	config() {
@@ -27,7 +28,7 @@ export default class ContactsView extends JetView {
 				return res;
 			},
 			on: {
-				onItemClick: (id) => {
+				onAfterSelect: (id) => {
 					const item = contactsCollection.getItem(id);
 					this.$$(constants.CONTACTS_VIEW.VIEW_IDS.LIST_ID).select(id);
 					this.$$(constants.CONTACTS_VIEW.VIEW_IDS.TEMPLATE_ID).parse(item);
@@ -71,12 +72,28 @@ export default class ContactsView extends JetView {
 										<img class="details_img" src=${photoUrl}>
 										<span>${Status}</span>
 									</div>
+									
 									<div class='df f-d-col column2'>
-										<span>${Email}</span>
-										<span>${Skype}</span>
-										<span>${Job}</span>
-										<span>${Company}</span>
-										<span>${Birthday}</span>
+										<div class='df f-d-row'>
+											<i class="icon-skype"></i>
+											<span>${Skype}</span>
+										</div>
+										<div class='df f-d-row'>
+											<i class="icon-skype"></i>
+											<span>${Email}</span>
+										</div>
+										<div class='df f-d-row'>
+											<i class="icon-key"></i>
+											<span>${Job}</span>
+										</div>
+										<div class='df f-d-row'>
+											<i class="icon-skype"></i>
+											<span>${Company}</span>
+										</div>
+										<div class='df f-d-row'>
+											<i class="icon-calendar"></i>
+											<span>${Birthday}</span>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -117,9 +134,8 @@ export default class ContactsView extends JetView {
 		]).then(() => {
 			list.sync(contactsCollection);
 			clientsDetailsTemplate.bind(list);
-			if (list.count() > 0) {
+			if (list.count()) {
 				list.select(1);
-				this.show("/top/contacts?id=1");
 			}
 		});
 	}

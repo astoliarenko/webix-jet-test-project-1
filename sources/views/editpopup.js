@@ -1,44 +1,51 @@
 import {JetView} from "webix-jet";
 
 import constants from "../constants";
-import {contactsCollection, activityTypeCollection, activitiesCollection} from "../models/collections";
+import activitiesCollection from "../models/activitiesCollection";
+import activityTypeCollection from "../models/activityTypeCollection";
+import contactsCollection from "../models/contactsСollections";
 
 export default class EditPopupView extends JetView {
 	config() {
+		const btnWidth = 150;
+		const saveActivity = () => {
+			const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
+			const formValues = form.getValues();
+			if (form.validate() && form.isDirty()) {
+				const date = formValues.DueDate;
+				if (date && formValues.Time) {
+					date.setHours(formValues.Time.getHours());
+					date.setMinutes(formValues.Time.getMinutes());
+				}
+				// Удаляю ключ тайм, который создавал при вызове метода ShowPopup()
+				delete formValues.Time;
+				formValues.DueDate = webix.Date
+					.dateToStr(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
+
+				if (formValues.id) {
+					activitiesCollection.updateItem(formValues.id, formValues);
+				}
+				else activitiesCollection.add(formValues);
+			}
+			else return;
+
+			form.clear();
+			form.clearValidation();
+			this.getRoot().hide();
+		};
+
 		const btnSave = {
 			view: "button",
+			width: btnWidth,
 			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_SAVE_ID,
 			label: "",
 			css: "webix_primary",
-			click: () => {
-				const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
-				const formValues = form.getValues();
-				if (form.validate() && form.isDirty()) {
-					const date = formValues.DueDate;
-					if (date) {
-						date.setHours(formValues.Time.getHours());
-						date.setMinutes(formValues.Time.getMinutes());
-					}
-					// Удаляю ключ тайм, который создавал при вызове метода ShowPopup()
-					delete formValues.Time;
-					formValues.DueDate = webix.Date
-						.dateToStr(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
-
-					if (formValues.id) {
-						activitiesCollection.updateItem(formValues.id, formValues);
-					}
-					else activitiesCollection.add(formValues);
-				}
-				else return;
-
-				form.clear();
-				form.clearValidation();
-				this.getRoot().hide();
-			}
+			click: saveActivity
 		};
 
 		const btnCancel = {
 			view: "button",
+			width: btnWidth,
 			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_CANCEL_ID,
 			value: "Cancel",
 			click: () => {
@@ -51,6 +58,7 @@ export default class EditPopupView extends JetView {
 
 		const checkbox = {
 			view: "checkbox",
+			css: "cursor-pointer",
 			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.CHECKBOX_ID,
 			label: "Completed",
 			name: "State",
@@ -118,6 +126,7 @@ export default class EditPopupView extends JetView {
 						checkbox,
 						{
 							cols: [
+								{},
 								btnSave,
 								btnCancel
 							]
@@ -139,7 +148,9 @@ export default class EditPopupView extends JetView {
 		};
 	}
 
-	showPopup(activity) {
+	showPopup(id) {
+		let activity;
+		if (id) activity = activitiesCollection.getItem(id);
 		const header = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.HEADER_ID);
 		const btnSave = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_SAVE_ID);
 		const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
@@ -155,9 +166,10 @@ export default class EditPopupView extends JetView {
 		btnSave.refresh();
 
 		if (activityCopy) {
+			console.log(activityCopy.DueDate);
 			activityCopy.DueDate = webix.Date
 				.strToDate(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(activityCopy.DueDate);
-
+			console.log(activityCopy.DueDate);
 			activityCopy.Time = activityCopy.DueDate;
 			// console.log("activity time", activityCopy.Time);
 			form.setValues(activityCopy);
