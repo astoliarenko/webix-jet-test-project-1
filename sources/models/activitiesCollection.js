@@ -5,7 +5,7 @@ const activitiesCollection = new webix.DataCollection({
 	save: "rest->http://localhost:8096/api/v1/activities/",
 	scheme: {
 		$init(obj) {
-			obj.DueDate = webix.Date.strToDate(constants.ACTIVITIES_VIEW.DATE_FORMAT)(obj.DueDate);
+			obj.DueDate = webix.Date.strToDate(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(obj.DueDate);
 		}
 	}
 });

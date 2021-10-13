@@ -56,12 +56,26 @@
 	font-size:20px;
 	vertical-align:middle;
 }
+h2, h4 {
+    margin: 0;
+}
+.details_header {
+    margin: 20px 0;
+}
+
 .item-list_container img{
     padding-top: 5px;
     padding-right: 10px;
 }
 .cursor-pointer {
     cursor: pointer;
+}
+.details-item {
+    align-items: center;
+    padding: 10px;
+}
+.details_container i {
+    margin-right: 10px;
 }
 .myHover {
     background-color: var(--color-hover);
@@ -72,6 +86,10 @@
 .details_img {
     width: 100px;
     height: 100px;
+    padding-bottom: 10px;
+}
+.details_container .row1 {
+    max-height: 160px;
 }
 .details_container {
     justify-content: start;
@@ -84,9 +102,7 @@
     flex-wrap: wrap;
 }
 /* потом спан изменится на див */
-.details_container span {
-    padding: 5px 0;
-}
+
 /* ------------ */
 .contacts-list-style .webix_list_item {
     height: auto !important;

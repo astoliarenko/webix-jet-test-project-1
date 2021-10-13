@@ -11,6 +11,7 @@ export default class EditPopupView extends JetView {
 		const saveActivity = () => {
 			const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
 			const formValues = form.getValues();
+			// console.log("значение формы после сабмита", formValues);
 			if (form.validate() && form.isDirty()) {
 				const date = formValues.DueDate;
 				if (date && formValues.Time) {
@@ -19,13 +20,22 @@ export default class EditPopupView extends JetView {
 				}
 				// Удаляю ключ тайм, который создавал при вызове метода ShowPopup()
 				delete formValues.Time;
+				//	преобразовать дату в строку формата серверного, а потом уже обновлять и добавлять
 				formValues.DueDate = webix.Date
 					.dateToStr(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
 
 				if (formValues.id) {
 					activitiesCollection.updateItem(formValues.id, formValues);
+					// formValues.DueDate = webix.Date
+					// 	.strToDate(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
 				}
-				else activitiesCollection.add(formValues);
+				else {
+					activitiesCollection.add(formValues);
+					activitiesCollection.getLastId();
+					// formValues.DueDate = webix.Date
+					// 	.strToDate(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
+				}
+				//	при добавлении нового элемента у него пропадает время при перезагрузке страницы
 			}
 			else return;
 
@@ -165,11 +175,10 @@ export default class EditPopupView extends JetView {
 		header.refresh();
 		btnSave.refresh();
 
-		if (activityCopy) {
-			console.log(activityCopy.DueDate);
-			activityCopy.DueDate = webix.Date
-				.strToDate(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(activityCopy.DueDate);
-			console.log(activityCopy.DueDate);
+		if (id) {
+			// activityCopy.DueDate = webix.Date
+			// 	.strToDate(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(activityCopy.DueDate);
+			// console.log(activityCopy.DueDate);
 			activityCopy.Time = activityCopy.DueDate;
 			// console.log("activity time", activityCopy.Time);
 			form.setValues(activityCopy);

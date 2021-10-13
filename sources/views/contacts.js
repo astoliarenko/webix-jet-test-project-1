@@ -74,23 +74,23 @@ export default class ContactsView extends JetView {
 									</div>
 									
 									<div class='df f-d-col column2'>
-										<div class='df f-d-row'>
+										<div class='details-item df f-d-row'>
 											<i class="icon-skype"></i>
 											<span>${Skype}</span>
 										</div>
-										<div class='df f-d-row'>
-											<i class="icon-skype"></i>
+										<div class='details-item df f-d-row'>
+											<i class="icon-mail-forward"></i>
 											<span>${Email}</span>
 										</div>
-										<div class='df f-d-row'>
-											<i class="icon-key"></i>
+										<div class='details-item df f-d-row'>
+											<i class="icon-user"></i>
 											<span>${Job}</span>
 										</div>
-										<div class='df f-d-row'>
-											<i class="icon-skype"></i>
+										<div class='details-item df f-d-row'>
+											<i class="icon-key"></i>
 											<span>${Company}</span>
 										</div>
-										<div class='df f-d-row'>
+										<div class='details-item df f-d-row'>
 											<i class="icon-calendar"></i>
 											<span>${Birthday}</span>
 										</div>
@@ -106,6 +106,7 @@ export default class ContactsView extends JetView {
 					css: "bg-white",
 					rows: [
 						{
+							paddingY: 20,
 							cols: [
 								btnDelete,
 								btnEdit
