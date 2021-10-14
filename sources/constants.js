@@ -5,7 +5,7 @@ export default {
 			TEMPLATE_ID: "contactsTemplateId"
 		},
 		LIST_WIDTH: 300,
-		BTN_WIDTH: 200
+		BTN_WIDTH: 150
 	},
 	ACTIVITIES_VIEW: {
 		VIEW_IDS: {

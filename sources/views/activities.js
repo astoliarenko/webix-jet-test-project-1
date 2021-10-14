@@ -45,7 +45,7 @@ export default class ActivitiesView extends JetView {
 					// 	return activityTypeCollection.getItem(id).Value;
 					// },
 					collection: activityTypeCollection,
-					sort: "string"
+					sort: "text"
 				},
 				// {
 				// 	id: "DueDate",
@@ -84,7 +84,7 @@ export default class ActivitiesView extends JetView {
 					// },
 					header: ["Contact", {content: "selectFilter"}],
 					collection: contactsCollection,
-					sort: "string"
+					sort: "text"
 				},
 				{
 					id: "edit",

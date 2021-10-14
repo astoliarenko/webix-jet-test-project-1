@@ -7,42 +7,9 @@ import contactsCollection from "../models/contactsСollections";
 
 export default class EditPopupView extends JetView {
 	config() {
+		this.saveActivity = this.saveActivity.bind(this);
+
 		const btnWidth = 150;
-		const saveActivity = () => {
-			const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
-			const formValues = form.getValues();
-			// console.log("значение формы после сабмита", formValues);
-			if (form.validate() && form.isDirty()) {
-				const date = formValues.DueDate;
-				if (date && formValues.Time) {
-					date.setHours(formValues.Time.getHours());
-					date.setMinutes(formValues.Time.getMinutes());
-				}
-				// Удаляю ключ тайм, который создавал при вызове метода ShowPopup()
-				delete formValues.Time;
-				//	преобразовать дату в строку формата серверного, а потом уже обновлять и добавлять
-				formValues.DueDate = webix.Date
-					.dateToStr(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
-
-				if (formValues.id) {
-					activitiesCollection.updateItem(formValues.id, formValues);
-					// formValues.DueDate = webix.Date
-					// 	.strToDate(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
-				}
-				else {
-					activitiesCollection.add(formValues);
-					activitiesCollection.getLastId();
-					// formValues.DueDate = webix.Date
-					// 	.strToDate(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
-				}
-				//	при добавлении нового элемента у него пропадает время при перезагрузке страницы
-			}
-			else return;
-
-			form.clear();
-			form.clearValidation();
-			this.getRoot().hide();
-		};
 
 		const btnSave = {
 			view: "button",
@@ -50,7 +17,7 @@ export default class EditPopupView extends JetView {
 			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_SAVE_ID,
 			label: "",
 			css: "webix_primary",
-			click: saveActivity
+			click: this.saveActivity
 		};
 
 		const btnCancel = {
@@ -156,6 +123,44 @@ export default class EditPopupView extends JetView {
 			position: "center",
 			body: form
 		};
+	}
+
+	saveActivity() {
+		const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
+		const formValues = form.getValues();
+		// console.log("значение формы после сабмита", formValues);
+		if (form.validate() && form.isDirty()) {
+			const date = formValues.DueDate;
+			console.log("date=", date);
+			if (date && formValues.Time) {
+				date.setHours(formValues.Time.getHours());
+				date.setMinutes(formValues.Time.getMinutes());
+			}
+			console.log("date after setH and setM=", date);
+			// Удаляю ключ тайм, который создавал при вызове метода ShowPopup()
+			delete formValues.Time;
+			//	преобразовать дату в строку формата серверного, а потом уже обновлять и добавлять
+			formValues.DueDate = webix.Date
+				.dateToStr(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
+
+			if (formValues.id) {
+				console.log("formValues before update", formValues);
+				activitiesCollection.updateItem(formValues.id, formValues);
+				// после обновления элемента коллекции при нажатии на карандаш показывает неправильное время
+				// тк время типа строка, хоотя дата правильная
+			}
+			else {
+				console.log("formValues before add", formValues);
+				activitiesCollection.add(formValues);
+			}
+			//	при добавлении нового элемента у него пропадает дата и время при перезагрузке страницы
+			// значит на схеме коллекции сбрасывается
+		}
+		else return;
+
+		form.clear();
+		form.clearValidation();
+		this.getRoot().hide();
 	}
 
 	showPopup(id) {
