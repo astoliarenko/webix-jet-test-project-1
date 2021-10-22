@@ -4,7 +4,7 @@ import constants from "../constants";
 import activitiesCollection from "../models/activitiesCollection";
 import activityTypeCollection from "../models/activityTypeCollection";
 import contactsCollection from "../models/contactsСollections";
-import EditPopupView from "./editpopup";
+import EditWindowView from "./editwindow";
 
 export default class ActivitiesView extends JetView {
 	config() {
@@ -20,7 +20,7 @@ export default class ActivitiesView extends JetView {
 			type: "button",
 			value: "Add activity",
 			click: () => {
-				this.popup.showPopup();
+				this.window.showWindow();
 			}
 		};
 
@@ -40,22 +40,11 @@ export default class ActivitiesView extends JetView {
 				{
 					id: "TypeID",
 					header: ["Activity type", {content: "selectFilter"}],
-					// template: (obj) => {
-					// 	const id = obj.TypeID;
-					// 	return activityTypeCollection.getItem(id).Value;
-					// },
 					collection: activityTypeCollection,
 					sort: "text"
 				},
-				// {
-				// 	id: "DueDate",
-				// 	header: ["Due date", {content: "dateFilter"}],
-				// 	format: webix.Date.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT),
-				// 	sort: "date"
-				// 	// template: obj => obj.DueDate
-				// },
 				{
-					id: "DueDate",
+					id: "DateObj",
 					width: datepickerWidth,
 					header: [
 						"Due date",
@@ -71,17 +60,12 @@ export default class ActivitiesView extends JetView {
 					id: "Details",
 					template: "#Details#",
 					header: ["Details", {content: "textFilter"}],
-					// collection: activitiesCollection,
 					fillspace: true,
 					sort: "string"
 				},
 				{
 					id: "ContactID",
 					width: contactWidth,
-					// template: (obj) => {
-					// 	const contact = contactsCollection.getItem(obj.ContactID);
-					// 	return `${contact.FirstName} ${contact.LastName}`;
-					// },
 					header: ["Contact", {content: "selectFilter"}],
 					collection: contactsCollection,
 					sort: "text"
@@ -112,13 +96,8 @@ export default class ActivitiesView extends JetView {
 					return false;
 				},
 				// constants.CSS.ACTIVITIES_VIEW.REMOVE_ITEM_DATATABLE: () => {
-				// "edit-datatable": (e, id) => {
-				// 	const item = activitiesCollection.getItem(id);
-				// 	this.popup.showPopup(item);
-				// }
 				"edit-datatable": (e, id) => {
-					if (id) this.popup.showPopup(id);
-					else return false;
+					this.window.showWindow(id);
 				}
 			},
 			on: {
@@ -126,11 +105,6 @@ export default class ActivitiesView extends JetView {
 					this.show(`/top/activities?id=${id}`);
 				}
 			}
-			// scheme: {
-			// 	$init(obj) {
-			// 		obj.DueDate = webix.Date.strToDate(constants.ACTIVITIES_VIEW.DATE_FORMAT)(obj.DueDate);
-			// 	}
-			// }
 		};
 
 		const ui = {
@@ -150,8 +124,7 @@ export default class ActivitiesView extends JetView {
 	}
 
 	init() {
-		// this.popup = this.ui(new EditPopupView("Save"));
-		this.popup = this.ui(EditPopupView);
+		this.window = this.ui(EditWindowView);
 		const datatable = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID);
 		webix.promise.all([
 			activitiesCollection.waitData,

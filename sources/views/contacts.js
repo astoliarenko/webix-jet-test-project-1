@@ -17,7 +17,7 @@ export default class ContactsView extends JetView {
 				onAfterSelect: (id) => {
 					const item = contactsCollection.getItem(id);
 					this.$$(constants.CONTACTS_VIEW.VIEW_IDS.TEMPLATE_ID).parse(item);
-					this.setParam("id", id, true);
+					// this.setParam("id", id, true);
 				}
 			}
 		};

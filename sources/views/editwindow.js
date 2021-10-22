@@ -5,7 +5,7 @@ import activitiesCollection from "../models/activitiesCollection";
 import activityTypeCollection from "../models/activityTypeCollection";
 import contactsCollection from "../models/contactsСollections";
 
-export default class EditPopupView extends JetView {
+export default class EditWindowView extends JetView {
 	config() {
 		this.saveActivity = this.saveActivity.bind(this);
 
@@ -14,7 +14,7 @@ export default class EditPopupView extends JetView {
 		const btnSave = {
 			view: "button",
 			width: btnWidth,
-			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_SAVE_ID,
+			localId: constants.EDIT_WINDOW_VIEW.VIEW_IDS.BTN_SAVE_ID,
 			label: "",
 			css: "webix_primary",
 			click: this.saveActivity
@@ -23,10 +23,10 @@ export default class EditPopupView extends JetView {
 		const btnCancel = {
 			view: "button",
 			width: btnWidth,
-			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_CANCEL_ID,
+			localId: constants.EDIT_WINDOW_VIEW.VIEW_IDS.BTN_CANCEL_ID,
 			value: "Cancel",
 			click: () => {
-				const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
+				const form = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.FORM_ID);
 				form.clear();
 				form.clearValidation();
 				this.getRoot().hide();
@@ -36,7 +36,7 @@ export default class EditPopupView extends JetView {
 		const checkbox = {
 			view: "checkbox",
 			css: "cursor-pointer",
-			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.CHECKBOX_ID,
+			localId: constants.EDIT_WINDOW_VIEW.VIEW_IDS.CHECKBOX_ID,
 			label: "Completed",
 			name: "State",
 			checkValue: "Close",
@@ -45,16 +45,10 @@ export default class EditPopupView extends JetView {
 
 		const form = {
 			view: "form",
-			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID,
+			localId: constants.EDIT_WINDOW_VIEW.VIEW_IDS.FORM_ID,
 			elements: [
 				{
 					rows: [
-						{
-							localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.HEADER_ID,
-							view: "template",
-							template: "",
-							type: "header"
-						},
 						{
 							view: "textarea",
 							label: "Details",
@@ -82,7 +76,7 @@ export default class EditPopupView extends JetView {
 								{
 									view: "datepicker",
 									value: "",
-									name: "DueDate",
+									name: "DateObj",
 									label: "Date",
 									width: 300,
 									timepicker: false,
@@ -118,74 +112,63 @@ export default class EditPopupView extends JetView {
 		};
 
 		return {
-			localId: constants.EDIT_POPUP_VIEW.VIEW_IDS.POPUP_ID,
-			view: "popup",
+			localId: constants.EDIT_WINDOW_VIEW.VIEW_IDS.POPUP_ID,
+			view: "window",
+			head: {localId: constants.EDIT_WINDOW_VIEW.VIEW_IDS.HEADER_ID, template: "Hello"},
 			position: "center",
 			body: form
 		};
 	}
 
 	saveActivity() {
-		const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
+		const form = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.FORM_ID);
 		const formValues = form.getValues();
-		// console.log("значение формы после сабмита", formValues);
-		if (form.validate() && form.isDirty()) {
-			const date = formValues.DueDate;
-			console.log("date=", date);
-			if (date && formValues.Time) {
-				date.setHours(formValues.Time.getHours());
-				date.setMinutes(formValues.Time.getMinutes());
-			}
-			console.log("date after setH and setM=", date);
-			// Удаляю ключ тайм, который создавал при вызове метода ShowPopup()
-			delete formValues.Time;
-			//	преобразовать дату в строку формата серверного, а потом уже обновлять и добавлять
-			formValues.DueDate = webix.Date
-				.dateToStr(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
 
-			if (formValues.id) {
-				console.log("formValues before update", formValues);
-				activitiesCollection.updateItem(formValues.id, formValues);
-				// после обновления элемента коллекции при нажатии на карандаш показывает неправильное время
-				// тк время типа строка, хоотя дата правильная
-			}
-			else {
-				console.log("formValues before add", formValues);
-				activitiesCollection.add(formValues);
-			}
-			//	при добавлении нового элемента у него пропадает дата и время при перезагрузке страницы
-			// значит на схеме коллекции сбрасывается
+		if (!form.validate() && !form.isDirty()) return false;
+
+		const date = formValues.DateObj;
+
+		// if (date && formValues.Time) {
+		// 	date.setHours(formValues.Time.getHours());
+		// 	date.setMinutes(formValues.Time.getMinutes());
+		// }
+
+		// delete formValues.Time;
+
+		// formValues.DueDate = webix.Date
+		// 	.dateToStr(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
+		formValues.DueDate = `${webix.Date
+			.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(date)} ${webix.Date
+			.dateToStr(constants.ACTIVITIES_VIEW.TIME_FORMAT)(formValues.Time)}`;
+
+		if (formValues.id) {
+			activitiesCollection.updateItem(formValues.id, formValues);
 		}
-		else return;
+		else activitiesCollection.add(formValues);
 
 		form.clear();
 		form.clearValidation();
 		this.getRoot().hide();
+		return false;
 	}
 
-	showPopup(id) {
+	showWindow(id) {
 		let activity;
 		if (id) activity = activitiesCollection.getItem(id);
-		const header = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.HEADER_ID);
-		const btnSave = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.BTN_SAVE_ID);
-		const form = this.$$(constants.EDIT_POPUP_VIEW.VIEW_IDS.FORM_ID);
+		const header = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.HEADER_ID);
+		const btnSave = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.BTN_SAVE_ID);
+		const form = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.FORM_ID);
 		const headerText = activity ? "Edit activity" : "Add activity";
 		const btnName = activity ? "Save" : "Add";
 		const activityCopy = Object.assign({}, activity);
 
 		header.define("template", headerText);
 		btnSave.define("label", btnName);
-		// header.config.template = headerText;
-		// btnSave.config.label = btnName;
+
 		header.refresh();
 		btnSave.refresh();
 
 		if (id) {
-			// activityCopy.DueDate = webix.Date
-			// 	.strToDate(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(activityCopy.DueDate);
-			// console.log(activityCopy.DueDate);
-			activityCopy.Time = activityCopy.DueDate;
-			// console.log("activity time", activityCopy.Time);
 			form.setValues(activityCopy);
 		}
 		else {

@@ -16,7 +16,7 @@ export default {
 		TIME_FORMAT: "%H:%i",
 		DATE_SERVER_FORMAT: "%Y-%m-%d %H:%i"
 	},
-	EDIT_POPUP_VIEW: {
+	EDIT_WINDOW_VIEW: {
 		VIEW_IDS: {
 			POPUP_ID: "activityPopupId",
 			FORM_ID: "popupFormId",
@@ -28,9 +28,6 @@ export default {
 		}
 	},
 	EVENTS: {
-		EDIT_POPUP_VIEW: {
-			SHOW_POPUP: "showEditPopup"
-		}
 	},
 	CSS: {
 		ACTIVITIES_VIEW: {
