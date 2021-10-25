@@ -7,8 +7,6 @@ import contactsCollection from "../models/contactsСollections";
 
 export default class EditWindowView extends JetView {
 	config() {
-		this.saveActivity = this.saveActivity.bind(this);
-
 		const btnWidth = 150;
 
 		const btnSave = {
@@ -17,7 +15,7 @@ export default class EditWindowView extends JetView {
 			localId: constants.EDIT_WINDOW_VIEW.VIEW_IDS.BTN_SAVE_ID,
 			label: "",
 			css: "webix_primary",
-			click: this.saveActivity
+			click: () => this.saveActivity()
 		};
 
 		const btnCancel = {
@@ -133,13 +131,21 @@ export default class EditWindowView extends JetView {
 		// 	date.setMinutes(formValues.Time.getMinutes());
 		// }
 
-		// delete formValues.Time;
 
 		// formValues.DueDate = webix.Date
 		// 	.dateToStr(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
-		formValues.DueDate = `${webix.Date
-			.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(date)} ${webix.Date
-			.dateToStr(constants.ACTIVITIES_VIEW.TIME_FORMAT)(formValues.Time)}`;
+		if (date) {
+			const formTime = formValues.Time ? webix.Date
+				.dateToStr(constants.ACTIVITIES_VIEW.TIME_FORMAT)(formValues.Time) : "00:00";
+			formValues.DueDate = `${webix.Date
+				.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(date)} ${formTime}`;
+		}
+		else {
+			formValues.DueDate = "";
+			formValues.Time = "";
+		}
+		// delete formValues.Time;
+		// delete formValues.DateObj;
 
 		if (formValues.id) {
 			activitiesCollection.updateItem(formValues.id, formValues);

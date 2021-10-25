@@ -25,7 +25,6 @@ export default class ContactsView extends JetView {
 		const btnAdd = {
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
 			view: "button",
-			type: "button",
 			value: "Add"
 			// click: () => {}
 		};
@@ -33,7 +32,6 @@ export default class ContactsView extends JetView {
 		const btnEdit = {
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
 			view: "button",
-			type: "button",
 			value: "Edit"
 			// click: () => {}
 		};
@@ -131,11 +129,13 @@ export default class ContactsView extends JetView {
 	init() {
 		const list = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.LIST_ID);
 		const clientsDetailsTemplate = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.TEMPLATE_ID);
+
+		list.sync(contactsCollection);
+
 		webix.promise.all([
 			contactsCollection.waitData,
 			statusesCollection.waitData
 		]).then(() => {
-			list.sync(contactsCollection);
 			clientsDetailsTemplate.bind(list);
 			if (list.count()) {
 				list.select(list.getFirstId());

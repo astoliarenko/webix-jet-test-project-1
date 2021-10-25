@@ -17,7 +17,6 @@ export default class ActivitiesView extends JetView {
 			localId: constants.ACTIVITIES_VIEW.VIEW_IDS.BTN_SAVE_ID,
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
 			view: "button",
-			type: "button",
 			value: "Add activity",
 			click: () => {
 				this.window.showWindow();
@@ -126,13 +125,14 @@ export default class ActivitiesView extends JetView {
 	init() {
 		this.window = this.ui(EditWindowView);
 		const datatable = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID);
-		webix.promise.all([
-			activitiesCollection.waitData,
-			contactsCollection.waitData,
-			activityTypeCollection.waitData
-		]).then(() => {
-			datatable.sync(activitiesCollection);
-			// console.log(activitiesCollection.data.pull);
-		});
+		datatable.sync(activitiesCollection);
+		// webix.promise.all([
+		// 	activitiesCollection.waitData,
+		// 	contactsCollection.waitData,
+		// 	activityTypeCollection.waitData
+		// ]).then(() => {
+		// 	datatable.sync(activitiesCollection);
+		// 	// console.log(activitiesCollection.data.pull);
+		// });
 	}
 }
