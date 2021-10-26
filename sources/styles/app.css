@@ -56,3 +56,67 @@
 	font-size:20px;
 	vertical-align:middle;
 }
+h2, h4 {
+    margin: 0;
+}
+.details_header {
+    margin: 20px 0;
+}
+
+.item-list_container img{
+    padding-top: 5px;
+    padding-right: 10px;
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+.details-item {
+    align-items: center;
+    padding: 10px;
+}
+.details_container i {
+    margin-right: 10px;
+}
+.myHover {
+    background-color: var(--color-hover);
+}
+.bg-white {
+    background-color: white;
+}
+.details_img {
+    width: 100px;
+    height: 100px;
+    padding-bottom: 10px;
+}
+.details_container .row1 {
+    max-height: 160px;
+}
+.details_container {
+    justify-content: start;
+}
+.details_container .column1 {
+    align-items: center;
+}
+.details_container .column2 {
+    padding-left: 20px;
+    flex-wrap: wrap;
+}
+/* потом спан изменится на див */
+
+/* ------------ */
+.contacts-list-style .webix_list_item {
+    height: auto !important;
+}
+.item-list_container img {
+    width: 60px;
+    height: 60px;
+}
+.df {
+    display: flex;
+}
+.f-d-col {
+    flex-direction: column;
+}
+.f-d-row {
+    flex-direction: row;
+}
