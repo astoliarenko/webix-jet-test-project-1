@@ -22,17 +22,39 @@ export default class ContactsView extends JetView {
 			}
 		};
 
-		const btnAdd = {
+		const btnDelete = {
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
 			view: "button",
-			value: "Add"
+			type: "icon",
+			icon: "webix_icon wxi-trash",
+			label: "Delete"
+			// click: () => {}
+		};
+
+		const btnAddContact = {
+			width: constants.CONTACTS_VIEW.BTN_WIDTH,
+			view: "button",
+			type: "icon",
+			icon: "webix_icon wxi-plus",
+			label: "Add Contact"
+			// click: () => {}
+		};
+
+		const btnAddActivity = {
+			width: constants.CONTACTS_VIEW.BTN_WIDTH,
+			view: "button",
+			type: "icon",
+			icon: "webix_icon wxi-plus",
+			label: "Add Activity"
 			// click: () => {}
 		};
 
 		const btnEdit = {
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
 			view: "button",
-			value: "Edit"
+			type: "icon",
+			icon: "webix_icon wxi-pencil",
+			label: "Edit"
 			// click: () => {}
 		};
 
@@ -49,7 +71,7 @@ export default class ContactsView extends JetView {
 						{
 							paddingY: 20,
 							cols: [
-								btnAdd,
+								btnDelete,
 								btnEdit
 							]
 						},
@@ -60,7 +82,25 @@ export default class ContactsView extends JetView {
 		};
 
 		const ui = {
-			cols: [сontactsList, clientsDetails]
+			cols: [{
+				rows: [
+					сontactsList,
+					// {},
+					{cols: [{}, btnAddContact, {}]}
+				]
+			},
+			{
+				rows: [
+					clientsDetails,
+					{
+						cols: [
+							{},
+							btnAddActivity
+						]
+					}
+				]
+			}
+			]
 			// cols: [сontactsList, {$subview: true}]
 		};
 
@@ -128,7 +168,7 @@ export default class ContactsView extends JetView {
 
 	init() {
 		const list = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.LIST_ID);
-		const clientsDetailsTemplate = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.TEMPLATE_ID);
+		// const clientsDetailsTemplate = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.TEMPLATE_ID);
 
 		list.sync(contactsCollection);
 
@@ -136,7 +176,7 @@ export default class ContactsView extends JetView {
 			contactsCollection.waitData,
 			statusesCollection.waitData
 		]).then(() => {
-			clientsDetailsTemplate.bind(list);
+			// clientsDetailsTemplate.bind(list);
 			if (list.count()) {
 				list.select(list.getFirstId());
 			}
