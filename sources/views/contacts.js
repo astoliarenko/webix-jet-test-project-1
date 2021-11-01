@@ -82,7 +82,6 @@ export default class ContactsView extends JetView {
 			contactsCollection.waitData,
 			statusesCollection.waitData
 		]).then(() => {
-			// clientsDetailsTemplate.bind(list);
 			if (list.count()) {
 				list.select(list.getFirstId());
 			}

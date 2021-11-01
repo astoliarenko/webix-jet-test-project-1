@@ -231,6 +231,7 @@ export default class ContactsFormView extends JetView {
 
 		const formValues = form.getValues();
 
+		formValues.Photo = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.CONTACT_PHOTO_ID).getValues().src;
 		formValues.Birthday = webix.Date
 			.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(formValues.BirthdayObj);
 
@@ -266,6 +267,10 @@ export default class ContactsFormView extends JetView {
 
 		if (this.contactId) {
 			form.parse(contactsCollection.getItem(this.contactId));
+		}
+		else {
+			form.clear();
+			form.clearValidation();
 		}
 	}
 
