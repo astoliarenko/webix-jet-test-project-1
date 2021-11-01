@@ -104,12 +104,17 @@ export default class ActivitiesTableView extends JetView {
 		return datatable;
 	}
 
-	init() {
+	init(view) {
 		this.window = this.ui(EditWindowView);
-		const datatable = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID);
-		datatable.sync(activitiesCollection);
+		view.sync(activitiesCollection);
 		this.on(this.app, constants.EVENTS.FILTER_ACTIVITIESTABLE, (id) => {
-			datatable.filter("#ContactID#", id);
+			view.filter("#ContactID#", id);
+		});
+		this.on(activitiesCollection, "onAfterAdd", () => {
+			if (this.hideInfo) this.app.callEvent(constants.EVENTS.FILTER_ACTIVITIESTABLE, [this.getParam("id")]);
+		});
+		this.on(activitiesCollection, "onAfterDelete", () => {
+			if (this.hideInfo) this.app.callEvent(constants.EVENTS.FILTER_ACTIVITIESTABLE, [this.getParam("id")]);
 		});
 	}
 }

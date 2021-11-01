@@ -24,6 +24,7 @@ export default class MyApp extends JetApp {
 
 if (!BUILD_AS_MODULE) {
 	const app = new MyApp();
+	// webix.debug({events: true});
 	webix.ready(() => {
 		app.render();
 		app.attachEvent("app:error:resolve", () => {
