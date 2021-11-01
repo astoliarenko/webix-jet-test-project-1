@@ -181,6 +181,7 @@ export default class ContactsDetailsView extends JetView {
 				const item = contactsCollection.getItem(this.contactId);
 				if (item) {
 					this.$$(constants.CONTACTS_VIEW.VIEW_IDS.TEMPLATE_ID).parse(item);
+					this.app.callEvent(constants.EVENTS.FILTER_ACTIVITIESTABLE, [this.contactId]);
 				}
 			});
 	}
