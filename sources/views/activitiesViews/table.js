@@ -93,6 +93,12 @@ export default class ActivitiesTableView extends JetView {
 				},
 				// constants.CSS.ACTIVITIES_VIEW.REMOVE_ITEM_DATATABLE: () => {
 				"edit-datatable": (e, id) => this.window.showWindow(id, this.hideInfo)
+			},
+			on: {
+				onAfterFilter: () => {
+					const id = this.getParam("id");
+					if (id) this.filter("#ContactID#", id);
+				}
 			}
 		};
 

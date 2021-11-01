@@ -236,8 +236,10 @@ export default class ContactsFormView extends JetView {
 			this.app.callEvent(constants.EVENTS.SELECT_CONTACT, [this.contactId]);
 		}
 		else {
-			contactsCollection.add(formValues);
-			this.app.callEvent(constants.EVENTS.SELECT_CONTACT, [contactsCollection.getLastId()]);
+			contactsCollection.waitSave(() => contactsCollection.add(formValues))
+				.then(() => {
+					this.app.callEvent(constants.EVENTS.SELECT_CONTACT, [contactsCollection.getLastId()]);
+				});
 		}
 
 		form.clear();
