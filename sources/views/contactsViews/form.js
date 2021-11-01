@@ -10,7 +10,6 @@ export default class ContactsFormView extends JetView {
 		const photoWidth = 130;
 		const photoHeight = 130;
 		const btnWidth = 100;
-		const inputHeight = 40;
 		const minWidthCols = 300;
 
 		const header = {
@@ -101,19 +100,16 @@ export default class ContactsFormView extends JetView {
 					margin: 10,
 					rows: [
 						{
-							height: inputHeight,
 							view: "text",
 							label: "First Name",
 							name: "FirstName"
 						},
 						{
-							height: inputHeight,
 							view: "text",
 							label: "Last Name",
 							name: "LastName"
 						},
 						{
-							height: inputHeight,
 							view: "richselect",
 							label: "Status",
 							name: "StatusID",
@@ -121,25 +117,21 @@ export default class ContactsFormView extends JetView {
 							invalidMessage: "Cannot be empty"
 						},
 						{
-							height: inputHeight,
 							view: "text",
 							label: "Job",
 							name: "Job"
 						},
 						{
-							height: inputHeight,
 							view: "text",
 							label: "Company",
 							name: "Company"
 						},
 						{
-							height: inputHeight,
 							view: "text",
 							label: "Website",
 							name: "Website"
 						},
 						{
-							height: inputHeight,
 							view: "text",
 							label: "Address",
 							name: "Address"
@@ -151,25 +143,21 @@ export default class ContactsFormView extends JetView {
 					margin: 10,
 					rows: [
 						{
-							height: inputHeight,
 							view: "text",
 							label: "Email",
 							name: "Email"
 						},
 						{
-							height: inputHeight,
 							view: "text",
 							label: "Skype",
 							name: "Skype"
 						},
 						{
-							height: inputHeight,
 							view: "text",
 							label: "Phone",
 							name: "Phone"
 						},
 						{
-							height: inputHeight,
 							view: "datepicker",
 							value: "",
 							name: "BirthdayObj",
@@ -237,8 +225,11 @@ export default class ContactsFormView extends JetView {
 		}
 		else {
 			contactsCollection.waitSave(() => contactsCollection.add(formValues))
-				.then(() => {
-					this.app.callEvent(constants.EVENTS.SELECT_CONTACT, [contactsCollection.getLastId()]);
+				// .then(() => {
+				// 	this.app.callEvent(constants.EVENTS.SELECT_CONTACT, [contactsCollection.getLastId()]);
+				// });
+				.then((res) => {
+					this.app.callEvent(constants.EVENTS.SELECT_CONTACT, [res.id]);
 				});
 		}
 

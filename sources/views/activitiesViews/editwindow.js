@@ -122,7 +122,7 @@ export default class EditWindowView extends JetView {
 		const form = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.FORM_ID);
 		const formValues = form.getValues();
 
-		if (!form.validate() && !form.isDirty()) return false;
+		if (!form.validate() || !form.isDirty()) return false;
 
 		const date = formValues.DateObj;
 
