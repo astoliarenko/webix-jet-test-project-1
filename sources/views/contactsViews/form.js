@@ -39,12 +39,10 @@ export default class ContactsFormView extends JetView {
 				form.clear();
 				form.clearValidation();
 
-				if (this.contactId) {
-					this.app.callEvent(constants.EVENTS.SELECT_CONTACT, [this.contactId]);
-				}
-				else {
-					this.app.callEvent(constants.EVENTS.SELECT_CONTACT, [contactsCollection.getFirstId()]);
-				}
+				this.app.callEvent(
+					constants.EVENTS.SELECT_CONTACT,
+					[this.contactId || contactsCollection.getFirstId()]
+				);
 			}
 		};
 
@@ -56,9 +54,7 @@ export default class ContactsFormView extends JetView {
 			accept: "image/jpeg, image/png",
 			multiple: false,
 			on: {
-				onBeforeFileAdd: (obj) => {
-					this.loadFile(obj);
-				}
+				onBeforeFileAdd: obj => this.loadFile(obj)
 			}
 		};
 
@@ -106,13 +102,13 @@ export default class ContactsFormView extends JetView {
 					rows: [
 						{
 							height: inputHeight,
-							view: "textarea",
+							view: "text",
 							label: "First Name",
 							name: "FirstName"
 						},
 						{
 							height: inputHeight,
-							view: "textarea",
+							view: "text",
 							label: "Last Name",
 							name: "LastName"
 						},
@@ -126,25 +122,25 @@ export default class ContactsFormView extends JetView {
 						},
 						{
 							height: inputHeight,
-							view: "textarea",
+							view: "text",
 							label: "Job",
 							name: "Job"
 						},
 						{
 							height: inputHeight,
-							view: "textarea",
+							view: "text",
 							label: "Company",
 							name: "Company"
 						},
 						{
 							height: inputHeight,
-							view: "textarea",
+							view: "text",
 							label: "Website",
 							name: "Website"
 						},
 						{
 							height: inputHeight,
-							view: "textarea",
+							view: "text",
 							label: "Address",
 							name: "Address"
 						}
@@ -156,19 +152,19 @@ export default class ContactsFormView extends JetView {
 					rows: [
 						{
 							height: inputHeight,
-							view: "textarea",
+							view: "text",
 							label: "Email",
 							name: "Email"
 						},
 						{
 							height: inputHeight,
-							view: "textarea",
+							view: "text",
 							label: "Skype",
 							name: "Skype"
 						},
 						{
 							height: inputHeight,
-							view: "textarea",
+							view: "text",
 							label: "Phone",
 							name: "Phone"
 						},

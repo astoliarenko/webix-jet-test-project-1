@@ -30,10 +30,11 @@ export default class ContactsFilesView extends JetView {
 					sort: "date"
 				},
 				{
-					id: "sizetext",
+					id: "size",
 					header: "Size",
 					width: sizeColumnWidth,
-					sort: "string"
+					template: "#sizetext#",
+					sort: "int"
 				},
 				{
 					id: "delete",

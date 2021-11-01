@@ -73,7 +73,6 @@ export default class ContactsDetailsView extends JetView {
 			value: "Activities"
 		};
 
-		// возможно нужно будет поменять ui
 		const ui = {
 			css: "bg-white",
 			rows: [

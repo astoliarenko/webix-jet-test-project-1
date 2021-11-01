@@ -117,6 +117,7 @@ export default class EditWindowView extends JetView {
 		};
 	}
 
+	// eslint-disable-next-line consistent-return
 	saveActivity() {
 		const form = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.FORM_ID);
 		const formValues = form.getValues();
@@ -146,12 +147,13 @@ export default class EditWindowView extends JetView {
 		form.clear();
 		form.clearValidation();
 		this.getRoot().hide();
-		return false;
 	}
 
 	showWindow(activityId, contactId) {
 		let activity;
+
 		if (activityId) activity = activitiesCollection.getItem(activityId);
+
 		const header = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.HEADER_ID);
 		const btnSave = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.BTN_SAVE_ID);
 		const form = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.FORM_ID);

@@ -92,12 +92,7 @@ export default class ActivitiesTableView extends JetView {
 					return false;
 				},
 				// constants.CSS.ACTIVITIES_VIEW.REMOVE_ITEM_DATATABLE: () => {
-				"edit-datatable": (e, id) => {
-					if (this.hideInfo) {
-						this.window.showWindow(id, true);
-					}
-					else this.window.showWindow(id);
-				}
+				"edit-datatable": (e, id) => this.window.showWindow(id, this.hideInfo)
 			}
 		};
 
