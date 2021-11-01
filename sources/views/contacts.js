@@ -14,10 +14,7 @@ export default class ContactsView extends JetView {
 			select: true,
 			template: this.renderContactListShortInfo,
 			on: {
-				onAfterSelect: (id) => {
-					this.show(`details?id=${id}`);
-					this.app.callEvent(constants.EVENTS.FILTER_ACTIVITIESTABLE, [id]);
-				}
+				onAfterSelect: id => this.show(`details?id=${id}`)
 			}
 		};
 

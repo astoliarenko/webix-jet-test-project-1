@@ -105,6 +105,18 @@ export default class ActivitiesTableView extends JetView {
 		return datatable;
 	}
 
+	urlChange(view) {
+		webix.promise.all([
+			activitiesCollection.waitData,
+			activityTypeCollection.waitData,
+			contactsCollection.waitData
+		])
+			.then(() => {
+				this.contactId = this.getParam("id");
+				if (this.contactId) view.filter("#ContactID#", this.contactId, true);
+			});
+	}
+
 	init(view) {
 		this.window = this.ui(EditWindowView);
 		view.sync(activitiesCollection);
@@ -115,6 +127,9 @@ export default class ActivitiesTableView extends JetView {
 			if (this.hideInfo) this.app.callEvent(constants.EVENTS.FILTER_ACTIVITIESTABLE, [this.getParam("id")]);
 		});
 		this.on(activitiesCollection, "onAfterDelete", () => {
+			if (this.hideInfo) this.app.callEvent(constants.EVENTS.FILTER_ACTIVITIESTABLE, [this.getParam("id")]);
+		});
+		this.on(activitiesCollection, "onDataUpdate", () => {
 			if (this.hideInfo) this.app.callEvent(constants.EVENTS.FILTER_ACTIVITIESTABLE, [this.getParam("id")]);
 		});
 	}
