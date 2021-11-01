@@ -266,7 +266,13 @@ export default class ContactsFormView extends JetView {
 		btnSave.refresh();
 
 		if (this.contactId) {
-			form.parse(contactsCollection.getItem(this.contactId));
+			const item = contactsCollection.getItem(this.contactId);
+
+			if (item) {
+				form.setValues(item);
+				this.$$(constants.CONTACTS_VIEW.VIEW_IDS.CONTACT_PHOTO_ID).setValues({src: item.Photo});
+			}
+			else this.$$(constants.CONTACTS_VIEW.VIEW_IDS.CONTACT_PHOTO_ID).setValues({src: ""});
 		}
 		else {
 			form.clear();

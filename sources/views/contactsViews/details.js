@@ -26,9 +26,7 @@ export default class ContactsDetailsView extends JetView {
 			type: "icon",
 			icon: "webix_icon wxi-pencil",
 			label: "Edit",
-			click: () => {
-				this.show(`contactsViews.form?id=${this.contactId}`);
-			}
+			click: () => this.show(`form?id=${this.contactId}`)
 		};
 
 		const btnAddActivity = {

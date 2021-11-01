@@ -15,10 +15,7 @@ export default class ContactsView extends JetView {
 			template: this.renderContactListShortInfo,
 			on: {
 				onAfterSelect: (id) => {
-					// this.setParam("id", id, true);
-					this.show(`contactsViews.details?id=${id}`);
-					// this.show(`/details?id=${id}`);
-					// вызвать ивент фильтра талблицы
+					this.show(`details?id=${id}`);
 					this.app.callEvent(constants.EVENTS.FILTER_ACTIVITIESTABLE, [id]);
 				}
 			}
@@ -31,7 +28,7 @@ export default class ContactsView extends JetView {
 			icon: "webix_icon wxi-plus",
 			label: "Add Contact",
 			align: "center",
-			click: () => this.show("contactsViews.form")
+			click: () => this.show("form")
 		};
 
 		const ui = {
