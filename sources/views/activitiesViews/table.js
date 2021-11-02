@@ -110,24 +110,27 @@ export default class ActivitiesTableView extends JetView {
 		])
 			.then(() => {
 				this.contactId = this.getParam("id");
-				if (this.contactId) view.filter("#ContactID#", this.contactId, true);
+				view.filterByAll();
+				if (this.contactId) {
+					view.filter("#ContactID#", this.contactId, true);
+				}
 			});
+	}
+
+	callEventFilterTable(id) {
+		if (id) {
+			this.app.callEvent(constants.EVENTS.FILTER_ACTIVITIESTABLE, [id]);
+		}
 	}
 
 	init(view) {
 		this.window = this.ui(EditWindowView);
 		view.sync(activitiesCollection);
 		this.on(this.app, constants.EVENTS.FILTER_ACTIVITIESTABLE, (id) => {
-			view.filter("#ContactID#", id);
+			if (id) view.filter("#ContactID#", id);
 		});
-		this.on(activitiesCollection, "onAfterAdd", () => {
-			if (this.hideInfo) this.app.callEvent(constants.EVENTS.FILTER_ACTIVITIESTABLE, [this.getParam("id")]);
-		});
-		this.on(activitiesCollection, "onAfterDelete", () => {
-			if (this.hideInfo) this.app.callEvent(constants.EVENTS.FILTER_ACTIVITIESTABLE, [this.getParam("id")]);
-		});
-		this.on(activitiesCollection, "onDataUpdate", () => {
-			if (this.hideInfo) this.app.callEvent(constants.EVENTS.FILTER_ACTIVITIESTABLE, [this.getParam("id")]);
-		});
+		this.on(activitiesCollection, "onAfterAdd", () => this.callEventFilterTable(this.contactId));
+		this.on(activitiesCollection, "onAfterDelete", () => this.callEventFilterTable(this.contactId));
+		this.on(activitiesCollection, "onDataUpdate", () => this.callEventFilterTable(this.contactId));
 	}
 }
