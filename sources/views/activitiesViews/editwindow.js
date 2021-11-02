@@ -1,9 +1,9 @@
 import {JetView} from "webix-jet";
 
-import constants from "../constants";
-import activitiesCollection from "../models/activitiesCollection";
-import activityTypeCollection from "../models/activityTypeCollection";
-import contactsCollection from "../models/contactsСollections";
+import constants from "../../constants";
+import activitiesCollection from "../../models/activitiesCollection";
+import activityTypeCollection from "../../models/activityTypeCollection";
+import contactsCollection from "../../models/contactsСollections";
 
 export default class EditWindowView extends JetView {
 	config() {
@@ -50,11 +50,9 @@ export default class EditWindowView extends JetView {
 						{
 							view: "textarea",
 							label: "Details",
-							id: "inpDetails",
 							name: "Details"
 						},
 						{
-							id: "TypeID",
 							view: "richselect",
 							label: "Type",
 							name: "TypeID",
@@ -62,12 +60,13 @@ export default class EditWindowView extends JetView {
 							invalidMessage: "Cannot be empty"
 						},
 						{
-							id: "ContactID",
 							view: "richselect",
+							localId: constants.ACTIVITIES_VIEW.VIEW_IDS.RICHSELECT_CONTACT_ID,
 							label: "Contact",
 							name: "ContactID",
 							options: contactsCollection,
 							invalidMessage: "Cannot be empty"
+							// disabled: true - indicates whether an item is enabled
 						},
 						{
 							cols: [
@@ -112,28 +111,28 @@ export default class EditWindowView extends JetView {
 		return {
 			localId: constants.EDIT_WINDOW_VIEW.VIEW_IDS.POPUP_ID,
 			view: "window",
+			modal: true,
 			head: {localId: constants.EDIT_WINDOW_VIEW.VIEW_IDS.HEADER_ID, template: "Hello"},
 			position: "center",
 			body: form
 		};
 	}
 
+	// eslint-disable-next-line consistent-return
 	saveActivity() {
 		const form = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.FORM_ID);
 		const formValues = form.getValues();
 
-		if (!form.validate() && !form.isDirty()) return false;
+		if (!form.validate()) return false;
+
+		if (!form.isDirty()) {
+			form.clear();
+			this.getRoot().hide();
+			return false;
+		}
 
 		const date = formValues.DateObj;
 
-		// if (date && formValues.Time) {
-		// 	date.setHours(formValues.Time.getHours());
-		// 	date.setMinutes(formValues.Time.getMinutes());
-		// }
-
-
-		// formValues.DueDate = webix.Date
-		// 	.dateToStr(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(date);
 		if (date) {
 			const formTime = formValues.Time ? webix.Date
 				.dateToStr(constants.ACTIVITIES_VIEW.TIME_FORMAT)(formValues.Time) : "00:00";
@@ -155,15 +154,17 @@ export default class EditWindowView extends JetView {
 		form.clear();
 		form.clearValidation();
 		this.getRoot().hide();
-		return false;
 	}
 
-	showWindow(id) {
+	showWindow(activityId, contactId) {
 		let activity;
-		if (id) activity = activitiesCollection.getItem(id);
+
+		if (activityId) activity = activitiesCollection.getItem(activityId);
+
 		const header = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.HEADER_ID);
 		const btnSave = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.BTN_SAVE_ID);
 		const form = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.FORM_ID);
+		const richselectContact = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.RICHSELECT_CONTACT_ID);
 		const headerText = activity ? "Edit activity" : "Add activity";
 		const btnName = activity ? "Save" : "Add";
 		const activityCopy = Object.assign({}, activity);
@@ -174,7 +175,15 @@ export default class EditWindowView extends JetView {
 		header.refresh();
 		btnSave.refresh();
 
-		if (id) {
+		if (!activityId && contactId) {
+			form.setValues({ContactID: contactsCollection.getItem(contactId)});
+			richselectContact.disable();
+		}
+		else if (activityId && contactId) {
+			form.setValues(activityCopy);
+			richselectContact.disable();
+		}
+		else if (activityId) {
 			form.setValues(activityCopy);
 		}
 		else {

@@ -9,7 +9,8 @@ export default class MyApp extends JetApp {
 			version: VERSION,
 			router: BUILD_AS_MODULE ? EmptyRouter : HashRouter,
 			debug: true,
-			start: "/top/contacts"
+			start: "/top/contacts",
+			views: {form: "contactsViews.form", details: "contactsViews.details"}
 		};
 
 		super({...defaults, ...config});
@@ -18,6 +19,7 @@ export default class MyApp extends JetApp {
 
 if (!BUILD_AS_MODULE) {
 	const app = new MyApp();
+	// webix.debug({events: true});
 	webix.ready(() => {
 		app.render();
 		app.attachEvent("app:error:resolve", () => {

@@ -4,7 +4,6 @@ const activityTypeCollection = new webix.DataCollection({
 	scheme: {
 		$init: (obj) => {
 			obj.value = obj.Value;
-			// was created new key "value", but it mb necessary to delete old one ("Value")
 		}
 	}
 });

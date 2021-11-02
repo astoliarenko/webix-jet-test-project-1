@@ -14,54 +14,31 @@ export default class ContactsView extends JetView {
 			select: true,
 			template: this.renderContactListShortInfo,
 			on: {
-				onAfterSelect: (id) => {
-					const item = contactsCollection.getItem(id);
-					this.$$(constants.CONTACTS_VIEW.VIEW_IDS.TEMPLATE_ID).parse(item);
-					// this.setParam("id", id, true);
-				}
+				onAfterSelect: id => this.show(`details?id=${id}`)
 			}
 		};
 
-		const btnAdd = {
+		const btnAddContact = {
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
 			view: "button",
-			value: "Add"
-			// click: () => {}
-		};
-
-		const btnEdit = {
-			width: constants.CONTACTS_VIEW.BTN_WIDTH,
-			view: "button",
-			value: "Edit"
-			// click: () => {}
-		};
-
-		const clientsDetails = {
-			cols: [
-				{
-					view: "template",
-					localId: constants.CONTACTS_VIEW.VIEW_IDS.TEMPLATE_ID,
-					template: this.renderContactDetails
-				},
-				{
-					css: "bg-white",
-					rows: [
-						{
-							paddingY: 20,
-							cols: [
-								btnAdd,
-								btnEdit
-							]
-						},
-						{}
-					]
-				}
-			]
+			type: "icon",
+			icon: "webix_icon wxi-plus",
+			label: "Add Contact",
+			align: "center",
+			click: () => this.show("form")
 		};
 
 		const ui = {
-			cols: [сontactsList, clientsDetails]
-			// cols: [сontactsList, {$subview: true}]
+			cols: [
+				{
+					css: "bg-white",
+					rows: [
+						сontactsList,
+						btnAddContact
+					]
+				},
+				{$subview: true}
+			]
 		};
 
 		return ui;
@@ -83,52 +60,15 @@ export default class ContactsView extends JetView {
 		return res;
 	}
 
-	renderContactDetails({FirstName, LastName, Photo, StatusID,
-		Email, Skype, Job, Company, Birthday}) {
-		const photoUrl = Photo || "./sources/img/man.png";
-		const item = statusesCollection.getItem(StatusID);
-		const Status = item ? item.Value : "unknown";
-		const res = `
-			<div class='details_container df f-d-col'>
-				<h2 class='details_header'>${FirstName} ${LastName}</h2>
-				<div class='df f-d-row row1'>
-					<div class ='df f-d-col column1'>
-						<img class="details_img" src=${photoUrl}>
-						<span>${Status}</span>
-					</div>
-					
-					<div class='df f-d-col column2'>
-						<div class='details-item df f-d-row'>
-							<i class="icon-skype"></i>
-							<span>${Skype}</span>
-						</div>
-						<div class='details-item df f-d-row'>
-							<i class="icon-mail-forward"></i>
-							<span>${Email}</span>
-						</div>
-						<div class='details-item df f-d-row'>
-							<i class="icon-user"></i>
-							<span>${Job}</span>
-						</div>
-						<div class='details-item df f-d-row'>
-							<i class="icon-key"></i>
-							<span>${Company}</span>
-						</div>
-						<div class='details-item df f-d-row'>
-							<i class="icon-calendar"></i>
-							<span>${Birthday}</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		`;
-		//  need to add location
-		return res;
-	}
-
 	init() {
 		const list = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.LIST_ID);
-		const clientsDetailsTemplate = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.TEMPLATE_ID);
+		// const clientsDetailsTemplate = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.TEMPLATE_ID);
+
+		this.on(this.app, constants.EVENTS.SELECT_CONTACT, (id) => {
+			list.unselectAll();
+			if (id) list.select(id);
+			else list.select(list.getFirstId());
+		});
 
 		list.sync(contactsCollection);
 
@@ -136,7 +76,6 @@ export default class ContactsView extends JetView {
 			contactsCollection.waitData,
 			statusesCollection.waitData
 		]).then(() => {
-			clientsDetailsTemplate.bind(list);
 			if (list.count()) {
 				list.select(list.getFirstId());
 			}

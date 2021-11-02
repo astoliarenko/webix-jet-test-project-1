@@ -2,7 +2,13 @@ export default {
 	CONTACTS_VIEW: {
 		VIEW_IDS: {
 			LIST_ID: "contactsListId",
-			TEMPLATE_ID: "contactsTemplateId"
+			TEMPLATE_ID: "contactsTemplateId",
+			FORM_ID: "contactsFormId",
+			FORM_HEADER_ID: "contactsFormHeaderId",
+			BTN_SAVE_FORM_ID: "contactsFormBtnSaveId",
+			DETAILS_ID: "contactsDetailsId",
+			FILES_DATATABLE_ID: "contactsFilesDatatableId",
+			CONTACT_PHOTO_ID: "contactPhotoId"
 		},
 		LIST_WIDTH: 300,
 		BTN_WIDTH: 150
@@ -10,7 +16,8 @@ export default {
 	ACTIVITIES_VIEW: {
 		VIEW_IDS: {
 			DATATABLE_ID: "datatableId",
-			BTN_SAVE_ID: "saveInfo"
+			BTN_SAVE_ID: "saveInfo",
+			RICHSELECT_CONTACT_ID: "richselectContactId"
 		},
 		DATE_FORMAT: "%Y-%m-%d",
 		TIME_FORMAT: "%H:%i",
@@ -28,6 +35,8 @@ export default {
 		}
 	},
 	EVENTS: {
+		FILTER_ACTIVITIESTABLE: "filterActivitiesTable",
+		SELECT_CONTACT: "selectContact"
 	},
 	CSS: {
 		ACTIVITIES_VIEW: {
