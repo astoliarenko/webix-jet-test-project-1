@@ -119,9 +119,6 @@ export default class ActivitiesTableView extends JetView {
 			.then(() => {
 				this.contactId = this.getParam("id");
 				view.filterByAll();
-				// if (this.contactId) {
-				// 	view.filter("#ContactID#", this.contactId, true);
-				// }
 				this.filterTable(this.contactId);
 			});
 	}
@@ -129,9 +126,6 @@ export default class ActivitiesTableView extends JetView {
 	init(view) {
 		this.window = this.ui(EditWindowView);
 		view.sync(activitiesCollection);
-		// this.on(this.app, constants.EVENTS.FILTER_ACTIVITIESTABLE, (id) => {
-		// 	if (id) view.filter("#ContactID#", id);
-		// });
 		this.on(activitiesCollection, "onAfterAdd", () => this.filterTable(this.contactId));
 		this.on(activitiesCollection, "onAfterDelete", () => this.filterTable(this.contactId));
 		this.on(activitiesCollection, "onDataUpdate", () => this.filterTable(this.contactId));
