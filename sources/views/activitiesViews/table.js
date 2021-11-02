@@ -95,7 +95,7 @@ export default class ActivitiesTableView extends JetView {
 				"edit-datatable": (e, id) => this.window.showWindow(id, this.hideInfo)
 			},
 			on: {
-				onAfterFilter: () => (this.contactId ? this.filterTable(this.contactId) : false)
+				onAfterFilter: () => this.filterTable(this.contactId)
 				// onAfterFilter: () => (this.contactId ? this.getRoot()
 				// .filter("#ContactID#", this.contactId, true) : false)
 			}

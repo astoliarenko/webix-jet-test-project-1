@@ -211,7 +211,13 @@ export default class ContactsFormView extends JetView {
 	saveContact() {
 		const form = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.FORM_ID);
 
-		if (!form.validate() || !form.isDirty()) return false;
+		if (!form.validate()) return false;
+
+		// if (!form.isDirty()) {
+		// 	form.clear();
+		// 	this.app.callEvent(constants.EVENTS.SELECT_CONTACT, [this.contactId]);
+		// 	return false;
+		// }
 
 		const formValues = form.getValues();
 
@@ -232,7 +238,6 @@ export default class ContactsFormView extends JetView {
 					this.app.callEvent(constants.EVENTS.SELECT_CONTACT, [res.id]);
 				});
 		}
-
 		form.clear();
 		form.clearValidation();
 
