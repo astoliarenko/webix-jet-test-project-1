@@ -95,11 +95,19 @@ export default class ActivitiesTableView extends JetView {
 				"edit-datatable": (e, id) => this.window.showWindow(id, this.hideInfo)
 			},
 			on: {
-				onAfterFilter: () => (this.contactId ? this.getRoot().filter("#ContactID#", this.contactId, true) : false)
+				onAfterFilter: () => (this.contactId ? this.filterTable(this.contactId) : false)
+				// onAfterFilter: () => (this.contactId ? this.getRoot()
+				// .filter("#ContactID#", this.contactId, true) : false)
 			}
 		};
 
 		return datatable;
+	}
+
+	filterTable(id) {
+		if (id) {
+			this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID).filter("#ContactID#", this.contactId, true);
+		}
 	}
 
 	urlChange(view) {
@@ -111,26 +119,21 @@ export default class ActivitiesTableView extends JetView {
 			.then(() => {
 				this.contactId = this.getParam("id");
 				view.filterByAll();
-				if (this.contactId) {
-					view.filter("#ContactID#", this.contactId, true);
-				}
+				// if (this.contactId) {
+				// 	view.filter("#ContactID#", this.contactId, true);
+				// }
+				this.filterTable(this.contactId);
 			});
-	}
-
-	callEventFilterTable(id) {
-		if (id) {
-			this.app.callEvent(constants.EVENTS.FILTER_ACTIVITIESTABLE, [id]);
-		}
 	}
 
 	init(view) {
 		this.window = this.ui(EditWindowView);
 		view.sync(activitiesCollection);
-		this.on(this.app, constants.EVENTS.FILTER_ACTIVITIESTABLE, (id) => {
-			if (id) view.filter("#ContactID#", id);
-		});
-		this.on(activitiesCollection, "onAfterAdd", () => this.callEventFilterTable(this.contactId));
-		this.on(activitiesCollection, "onAfterDelete", () => this.callEventFilterTable(this.contactId));
-		this.on(activitiesCollection, "onDataUpdate", () => this.callEventFilterTable(this.contactId));
+		// this.on(this.app, constants.EVENTS.FILTER_ACTIVITIESTABLE, (id) => {
+		// 	if (id) view.filter("#ContactID#", id);
+		// });
+		this.on(activitiesCollection, "onAfterAdd", () => this.filterTable(this.contactId));
+		this.on(activitiesCollection, "onAfterDelete", () => this.filterTable(this.contactId));
+		this.on(activitiesCollection, "onDataUpdate", () => this.filterTable(this.contactId));
 	}
 }

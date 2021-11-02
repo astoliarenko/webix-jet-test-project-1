@@ -111,6 +111,7 @@ export default class EditWindowView extends JetView {
 		return {
 			localId: constants.EDIT_WINDOW_VIEW.VIEW_IDS.POPUP_ID,
 			view: "window",
+			modal: true,
 			head: {localId: constants.EDIT_WINDOW_VIEW.VIEW_IDS.HEADER_ID, template: "Hello"},
 			position: "center",
 			body: form
