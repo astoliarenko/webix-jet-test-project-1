@@ -104,11 +104,50 @@ export default class ActivitiesTableView extends JetView {
 		return datatable;
 	}
 
-	filterTable(id) {
+	filterTable(id, externalFilter) {
+		// 	if third param set to true, each next filtering criteria
+		// will be applied to the already filtered list
+		const table = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID);
+
 		if (id) {
-			this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID).filter("#ContactID#", this.contactId, true);
+			table.filter("#ContactID#", this.contactId, true);
+		}
+		else if (externalFilter) {
+			const currentDateObj = new Date();
+			const tomorrowDateObj = new Date(Date.parse(currentDateObj) + 86400000);
+			// 1000 * 60 * 60 * 24 = 86400000 = 1 day in msec
+			const currentDateStr = webix.Date
+				.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(currentDateObj);
+
+			switch (externalFilter) {
+				case "overdue":
+					table.filter(obj => obj.DateObj < currentDateObj, this.contactId, false);
+					break;
+				case "completed":
+					table.filter(obj => obj.State === "Close", this.contactId, false);
+					break;
+				case "today":
+					table.filter((obj) => {
+						const activityDateStr = obj.DueDate.slice(0, 10);
+						return activityDateStr === currentDateStr;
+					}, this.contactId, false);
+					break;
+				case "tomorrow":
+					table.filter((obj) => {
+						const activityDateStr = obj.DueDate.slice(0, 10);
+						const activityDateTomorrowStr = webix.Date
+							.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(tomorrowDateObj).slice(0, 10);
+						return activityDateTomorrowStr === activityDateStr;
+					}, this.contactId, false);
+					break;
+				default:
+					table.filter(obj => obj, this.contactId, false);
+			}
 		}
 	}
+
+	// 			{id: "thisWeek", value: "This week"},
+	// 			{id: "thisMonth", value: "This month"}
 
 	urlChange(view) {
 		webix.promise.all([

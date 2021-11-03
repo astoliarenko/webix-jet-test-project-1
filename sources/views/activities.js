@@ -16,6 +16,30 @@ export default class ActivitiesView extends JetView {
 			}
 		};
 
+		const table = new ActivitiesTableView(this.app);
+
+		const activitiesTabbar = {
+			borderless: true,
+			view: "tabbar",
+			options: [
+				{id: "all", value: "All"},
+				{id: "overdue", value: "Overdue"},
+				{id: "completed", value: "Completed"},
+				{id: "today", value: "Today"},
+				{id: "tomorrow", value: "Tomorrow"},
+				{id: "thisWeek", value: "This week"},
+				{id: "thisMonth", value: "This month"}
+			],
+			multiview: true,
+			value: "all",
+			on: {
+				onAfterTabClick: (tabbarId) => {
+					// таблица.filterByAll();
+					table.filterTable(null, tabbarId);
+				}
+			}
+		};
+
 		const ui = {
 			rows: [
 				{
@@ -25,7 +49,9 @@ export default class ActivitiesView extends JetView {
 						btnAdd
 					]
 				},
-				ActivitiesTableView
+				{css: "bg-white", cols: [activitiesTabbar, {}]},
+				// activitiesTabbar,
+				table
 			]
 		};
 

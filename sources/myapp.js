@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import {JetApp, HashRouter} from "webix-jet";
+import {JetApp, EmptyRouter, HashRouter, plugins} from "webix-jet";
 import "./styles/app.css";
 
 export default class MyApp extends JetApp {
@@ -22,6 +22,7 @@ if (!BUILD_AS_MODULE) {
 	// webix.debug({events: true});
 	webix.ready(() => {
 		app.render();
+		app.use(plugins.Locale);
 		app.attachEvent("app:error:resolve", () => {
 			webix.delay(() => app.show(app.config.start));
 		});

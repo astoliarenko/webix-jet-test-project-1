@@ -28,11 +28,19 @@ export default class ContactsView extends JetView {
 			click: () => this.show("form")
 		};
 
+		const filter = {
+			view: "text",
+			placeholder: "type to find matching contacts",
+			// label: "Address",
+			name: "contactsFilter"
+		};
+
 		const ui = {
 			cols: [
 				{
 					css: "bg-white",
 					rows: [
+						filter,
 						сontactsList,
 						btnAddContact
 					]
