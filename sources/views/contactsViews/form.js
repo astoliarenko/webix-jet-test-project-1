@@ -6,24 +6,27 @@ import statusesCollection from "../../models/statusesCollection";
 
 export default class ContactsFormView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		const btnsPhotoBoxWidth = 150;
 		const photoWidth = 130;
 		const photoHeight = 130;
 		const btnWidth = 100;
 		const minWidthCols = 300;
+		const labelWidth = 120;
 
 		const header = {
 			localId: constants.CONTACTS_VIEW.VIEW_IDS.FORM_HEADER_ID,
 			view: "template",
 			type: "header",
-			template: "Add contact"
+			template: _("Add contact")
 		};
 
 		const btnSave = {
 			view: "button",
 			width: btnWidth,
 			localId: constants.CONTACTS_VIEW.VIEW_IDS.BTN_SAVE_FORM_ID,
-			label: "Save",
+			label: _("Save"),
 			css: "webix_primary",
 			click: () => this.saveContact()
 		};
@@ -31,7 +34,7 @@ export default class ContactsFormView extends JetView {
 		const btnCancel = {
 			view: "button",
 			width: btnWidth,
-			value: "Cancel",
+			label: _("Cancel"),
 			click: () => {
 				const form = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.FORM_ID);
 
@@ -48,7 +51,7 @@ export default class ContactsFormView extends JetView {
 		const btnChangePhoto = {
 			view: "uploader",
 			width: btnsPhotoBoxWidth,
-			label: "Change photo",
+			label: _("Change photo"),
 			autosend: false,
 			accept: "image/jpeg, image/png",
 			multiple: false,
@@ -60,7 +63,7 @@ export default class ContactsFormView extends JetView {
 		const btnDeletePhoto = {
 			view: "button",
 			width: btnsPhotoBoxWidth,
-			label: "Delete photo",
+			label: _("Delete photo"),
 			click: () => this.$$(constants.CONTACTS_VIEW.VIEW_IDS.CONTACT_PHOTO_ID).setValues({src: ""})
 		};
 
@@ -101,39 +104,46 @@ export default class ContactsFormView extends JetView {
 					rows: [
 						{
 							view: "text",
-							label: "First Name",
+							label: _("First Name"),
+							labelWidth,
 							name: "FirstName"
 						},
 						{
 							view: "text",
-							label: "Last Name",
+							label: _("Last Name"),
+							labelWidth,
 							name: "LastName"
 						},
 						{
 							view: "richselect",
-							label: "Status",
+							label: _("Status"),
+							labelWidth,
 							name: "StatusID",
 							options: statusesCollection,
 							invalidMessage: "Cannot be empty"
 						},
 						{
 							view: "text",
-							label: "Job",
+							label: _("Job"),
+							labelWidth,
 							name: "Job"
 						},
 						{
 							view: "text",
-							label: "Company",
+							label: _("Company"),
+							labelWidth,
 							name: "Company"
 						},
 						{
 							view: "text",
-							label: "Website",
+							label: _("Website"),
+							labelWidth,
 							name: "Website"
 						},
 						{
 							view: "text",
-							label: "Address",
+							label: _("Address"),
+							labelWidth,
 							name: "Address"
 						}
 					]
@@ -144,25 +154,28 @@ export default class ContactsFormView extends JetView {
 					rows: [
 						{
 							view: "text",
-							label: "Email",
+							label: _("Email"),
+							labelWidth,
 							name: "Email"
 						},
 						{
 							view: "text",
-							label: "Skype",
+							label: _("Skype"),
+							labelWidth,
 							name: "Skype"
 						},
 						{
 							view: "text",
-							label: "Phone",
+							label: _("Phone"),
+							labelWidth,
 							name: "Phone"
 						},
 						{
 							view: "datepicker",
 							value: "",
 							name: "BirthdayObj",
-							label: "Birthday",
-							width: 300,
+							label: _("Birthday"),
+							labelWidth,
 							timepicker: false,
 							format: webix.Date.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)
 						},
@@ -225,15 +238,15 @@ export default class ContactsFormView extends JetView {
 		formValues.Birthday = webix.Date
 			.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(formValues.BirthdayObj);
 
+		// console.log("Birthday before save", formValues.Birthday);
+		// console.log("formValues before save", formValues);
+
 		if (this.contactId) {
 			contactsCollection.updateItem(formValues.id, formValues);
 			this.app.callEvent(constants.EVENTS.SELECT_CONTACT, [this.contactId]);
 		}
 		else {
 			contactsCollection.waitSave(() => contactsCollection.add(formValues))
-				// .then(() => {
-				// 	this.app.callEvent(constants.EVENTS.SELECT_CONTACT, [contactsCollection.getLastId()]);
-				// });
 				.then((res) => {
 					this.app.callEvent(constants.EVENTS.SELECT_CONTACT, [res.id]);
 				});
@@ -246,12 +259,13 @@ export default class ContactsFormView extends JetView {
 
 	urlChange() {
 		this.contactId = this.getParam("id", true);
+		const _ = this.app.getService("locale")._;
 
 		const header = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.FORM_HEADER_ID);
 		const btnSave = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.BTN_SAVE_FORM_ID);
 		const form = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.FORM_ID);
-		const headerText = this.contactId ? "Edit contact" : "Add contact";
-		const btnName = this.contactId ? "Save" : "Add";
+		const headerText = this.contactId ? _("Edit contact") : _("Add contact");
+		const btnName = this.contactId ? _("Save") : _("Add");
 
 		header.define("template", headerText);
 		btnSave.define("label", btnName);

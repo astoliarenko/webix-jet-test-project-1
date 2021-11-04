@@ -6,11 +6,13 @@ import ActivitiesTableView from "./activitiesViews/table";
 
 export default class ActivitiesView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		const btnAdd = {
 			localId: constants.ACTIVITIES_VIEW.VIEW_IDS.BTN_SAVE_ID,
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
 			view: "button",
-			value: "Add activity",
+			value: _("Add activity"),
 			click: () => {
 				this.window.showWindow();
 			}
@@ -22,19 +24,20 @@ export default class ActivitiesView extends JetView {
 			borderless: true,
 			view: "tabbar",
 			options: [
-				{id: "all", value: "All"},
-				{id: "overdue", value: "Overdue"},
-				{id: "completed", value: "Completed"},
-				{id: "today", value: "Today"},
-				{id: "tomorrow", value: "Tomorrow"},
-				{id: "thisWeek", value: "This week"},
-				{id: "thisMonth", value: "This month"}
+				{id: "all", value: _("All")},
+				{id: "overdue", value: _("Overdue")},
+				{id: "completed", value: _("Completed")},
+				{id: "today", value: _("Today")},
+				{id: "tomorrow", value: _("Tomorrow")},
+				{id: "thisWeek", value: _("This week")},
+				{id: "thisMonth", value: _("This month")}
 			],
 			multiview: true,
 			value: "all",
 			on: {
 				onAfterTabClick: (tabbarId) => {
 					// таблица.filterByAll();
+					// table.filterDtByAll();
 					table.filterTable(null, tabbarId);
 				}
 			}

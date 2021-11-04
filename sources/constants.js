@@ -8,10 +8,11 @@ export default {
 			BTN_SAVE_FORM_ID: "contactsFormBtnSaveId",
 			DETAILS_ID: "contactsDetailsId",
 			FILES_DATATABLE_ID: "contactsFilesDatatableId",
-			CONTACT_PHOTO_ID: "contactPhotoId"
+			CONTACT_PHOTO_ID: "contactPhotoId",
+			FILTER_ID: "contactsFilter"
 		},
 		LIST_WIDTH: 300,
-		BTN_WIDTH: 150
+		BTN_WIDTH: 200
 	},
 	ACTIVITIES_VIEW: {
 		VIEW_IDS: {
@@ -22,6 +23,11 @@ export default {
 		DATE_FORMAT: "%Y-%m-%d",
 		TIME_FORMAT: "%H:%i",
 		DATE_SERVER_FORMAT: "%Y-%m-%d %H:%i"
+	},
+	SETTINGS_VIEW: {
+		VIEW_IDS: {
+			DATATABLE_ID: "datatableId"
+		}
 	},
 	EDIT_WINDOW_VIEW: {
 		VIEW_IDS: {
@@ -36,7 +42,8 @@ export default {
 	},
 	EVENTS: {
 		FILTER_ACTIVITIESTABLE: "filterActivitiesTable",
-		SELECT_CONTACT: "selectContact"
+		SELECT_CONTACT: "selectContact",
+		GET_DATA_FROM_POPUP: "getDataFromPopup"
 	},
 	CSS: {
 		ACTIVITIES_VIEW: {

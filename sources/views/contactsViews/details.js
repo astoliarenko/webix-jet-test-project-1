@@ -11,12 +11,17 @@ import ContactsFilesView from "./files";
 
 export default class ContactsDetailsView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
+		const tableTabbarActivitiesId = "activities";
+		const tableTabbarFilesId = "files";
+
 		const btnDelete = {
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
 			view: "button",
 			type: "icon",
 			icon: "webix_icon wxi-trash",
-			label: "Delete",
+			label: _("Delete"),
 			click: () => this.deleteContact()
 		};
 
@@ -25,7 +30,7 @@ export default class ContactsDetailsView extends JetView {
 			view: "button",
 			type: "icon",
 			icon: "webix_icon wxi-pencil",
-			label: "Edit",
+			label: _("Edit"),
 			click: () => this.show(`form?id=${this.contactId}`)
 		};
 
@@ -34,7 +39,7 @@ export default class ContactsDetailsView extends JetView {
 			view: "button",
 			type: "icon",
 			icon: "webix_icon wxi-plus",
-			label: "Add Activity",
+			label: _("Add activity"),
 			click: () => this.window.showWindow(null, this.contactId)
 		};
 
@@ -68,9 +73,9 @@ export default class ContactsDetailsView extends JetView {
 		const tableTabbar = {
 			borderless: true,
 			view: "tabbar",
-			options: ["Activities", "Files"],
+			options: [{id: tableTabbarActivitiesId, value: _("Activities")}, {id: tableTabbarFilesId, value: _("Files")}],
 			multiview: true,
-			value: "Activities"
+			value: tableTabbarActivitiesId
 		};
 
 		const ui = {
@@ -82,14 +87,14 @@ export default class ContactsDetailsView extends JetView {
 				{
 					cells: [
 						{
-							id: "Activities",
+							id: tableTabbarActivitiesId,
 							rows: [
 								{$subview: new ActivitiesTableView(this.app, true)},
 								{cols: [{}, btnAddActivity]}
 							]
 						},
 						{
-							id: "Files",
+							id: tableTabbarFilesId,
 							rows: [{$subview: ContactsFilesView}]
 						}
 					]

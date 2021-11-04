@@ -13,10 +13,13 @@ export default class ActivitiesTableView extends JetView {
 	}
 
 	config() {
-		const datepickerWidth = 150;
+		const _ = this.app.getService("locale")._;
+
+		const datepickerWidth = 160;
 		const stateWidth = 50;
 		const iconColumnWidth = 50;
 		const contactWidth = 150;
+		const activityTypeWidth = 140;
 
 		const datatable = {
 			view: "datatable",
@@ -33,7 +36,8 @@ export default class ActivitiesTableView extends JetView {
 				},
 				{
 					id: "TypeID",
-					header: ["Activity type", {content: "selectFilter"}],
+					width: activityTypeWidth,
+					header: [_("Activity type"), {content: "selectFilter"}],
 					collection: activityTypeCollection,
 					sort: "text"
 				},
@@ -41,7 +45,7 @@ export default class ActivitiesTableView extends JetView {
 					id: "DateObj",
 					width: datepickerWidth,
 					header: [
-						"Due date",
+						_("Due date"),
 						{
 							content: "datepickerFilter",
 							inputConfig: {format: webix.Date.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)}
@@ -53,7 +57,7 @@ export default class ActivitiesTableView extends JetView {
 				{
 					id: "Details",
 					template: "#Details#",
-					header: ["Details", {content: "textFilter"}],
+					header: [_("Details"), {content: "textFilter"}],
 					fillspace: true,
 					sort: "string"
 				},
@@ -62,7 +66,7 @@ export default class ActivitiesTableView extends JetView {
 					hidden: this.hideInfo,
 					id: "ContactID",
 					width: contactWidth,
-					header: ["Contact", {content: "selectFilter"}],
+					header: [_("Contact"), {content: "selectFilter"}],
 					collection: contactsCollection,
 					sort: "text"
 				},
@@ -86,7 +90,7 @@ export default class ActivitiesTableView extends JetView {
 			onClick: {
 				"remove-item-datatable": (e, id) => {
 				// constants.CSS.ACTIVITIES_VIEW.REMOVE_ITEM_DATATABLE: function (e, id) {
-					webix.confirm("Delete this activity?").then(() => {
+					webix.confirm(_("Delete this activity?")).then(() => {
 						activitiesCollection.remove(id);
 					});
 					return false;
@@ -104,8 +108,12 @@ export default class ActivitiesTableView extends JetView {
 		return datatable;
 	}
 
+	filterDtByAll() {
+		this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID).filterByAll();
+	}
+
 	filterTable(id, externalFilter) {
-		// 	if third param set to true, each next filtering criteria
+		// 	if third param in .filter() set to true, each next filtering criteria
 		// will be applied to the already filtered list
 		const table = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID);
 
@@ -113,41 +121,48 @@ export default class ActivitiesTableView extends JetView {
 			table.filter("#ContactID#", this.contactId, true);
 		}
 		else if (externalFilter) {
+			// table.filter(obj => obj, null, true);
 			const currentDateObj = new Date();
-			const tomorrowDateObj = new Date(Date.parse(currentDateObj) + 86400000);
-			// 1000 * 60 * 60 * 24 = 86400000 = 1 day in msec
 			const currentDateStr = webix.Date
 				.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(currentDateObj);
-
-			switch (externalFilter) {
-				case "overdue":
-					table.filter(obj => obj.DateObj < currentDateObj, this.contactId, false);
-					break;
-				case "completed":
-					table.filter(obj => obj.State === "Close", this.contactId, false);
-					break;
-				case "today":
-					table.filter((obj) => {
-						const activityDateStr = obj.DueDate.slice(0, 10);
+			const currentDateInMSec = Date.parse(currentDateObj);
+			const currentDay = currentDateObj.getDay() - 1;
+			const oneDayInMSec = 86400000;
+			// 1000 * 60 * 60 * 24 = 86400000 = 1 day in msec
+			const tomorrowDateObj = new Date(currentDateInMSec + oneDayInMSec);
+			const currentMonth = currentDateObj.getMonth();
+			const startCurWeekObj = new Date(currentDateInMSec - oneDayInMSec * currentDay);
+			const startCurWeekStr = webix.Date
+				.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(startCurWeekObj);
+			const endCurWeekObj = new Date(currentDateInMSec + oneDayInMSec * (7 - currentDay));
+			const endCurWeekStr = webix.Date
+				.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(endCurWeekObj);
+			const matchItem = (obj) => {
+				const activityDateStr = obj.DueDate.slice(0, 10);
+				switch (externalFilter) {
+					case "overdue":
+						return obj.DateObj < currentDateObj;
+					case "completed":
+						return obj.State === "Close";
+					case "today":
+						// eslint-disable-next-line no-case-declarations
 						return activityDateStr === currentDateStr;
-					}, this.contactId, false);
-					break;
-				case "tomorrow":
-					table.filter((obj) => {
-						const activityDateStr = obj.DueDate.slice(0, 10);
-						const activityDateTomorrowStr = webix.Date
-							.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(tomorrowDateObj).slice(0, 10);
-						return activityDateTomorrowStr === activityDateStr;
-					}, this.contactId, false);
-					break;
-				default:
-					table.filter(obj => obj, this.contactId, false);
-			}
+					case "tomorrow":
+						return (webix.Date
+							.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(tomorrowDateObj)
+							.slice(0, 10) === activityDateStr);
+					case "thisWeek":
+						return (startCurWeekStr <= activityDateStr) && (activityDateStr < endCurWeekStr);
+					case "thisMonth":
+						return obj.DateObj.getMonth() === currentMonth;
+					default:
+						return obj;
+				}
+			};
+
+			table.filter(obj => matchItem(obj), null, false);
 		}
 	}
-
-	// 			{id: "thisWeek", value: "This week"},
-	// 			{id: "thisMonth", value: "This month"}
 
 	urlChange(view) {
 		webix.promise.all([

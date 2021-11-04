@@ -1,5 +1,10 @@
 import {JetView} from "webix-jet";
 
+import activityTypeCollection from "../models/activityTypeCollection";
+import statusesCollection from "../models/statusesCollection";
+import SettingsPopupView from "./settingsViews/popup";
+import SettingsTableView from "./settingsViews/table";
+
 export default class SettingsView extends JetView {
 	config() {
 		const param = this.app.getService("locale");
@@ -8,6 +13,7 @@ export default class SettingsView extends JetView {
 
 		const settingsBtns = {
 			width: 100,
+			localId: "idddd",
 			view: "segmented",
 			value: language,
 			// вэлью задает дефолт состояние по id из options ( en - id: "en")
@@ -16,9 +22,44 @@ export default class SettingsView extends JetView {
 				{id: "en", value: _("EN")}
 			],
 			click: () => {
-				param.setLang(this.getRoot().getValue());
+				param.setLang(this.$$("idddd").getValue());
 			}
 		};
-		return settingsBtns;
+
+		const headerStatusesDt = {
+			view: "template", // optional
+			template: _("Statuses"),
+			type: "header"
+		};
+
+		const headerActivityTypeDt = {
+			view: "template", // optional
+			template: _("Activity type"),
+			type: "header"
+		};
+
+		const statusesDt = new SettingsTableView(this.app, statusesCollection);
+		const activityTypeDt = new SettingsTableView(this.app, activityTypeCollection);
+
+		const ui = {
+			rows: [
+				{rows: [headerStatusesDt, statusesDt]},
+				{},
+				{rows: [headerActivityTypeDt, activityTypeDt]},
+				{},
+				{
+					cols: [
+						{},
+						settingsBtns
+					]
+				}
+			]
+		};
+
+		return ui;
+	}
+
+	init() {
+		this.popup = this.ui(SettingsPopupView);
 	}
 }

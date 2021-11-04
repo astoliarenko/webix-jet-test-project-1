@@ -6,6 +6,8 @@ import statusesCollection from "../models/statusesCollection";
 
 export default class ContactsView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		const сontactsList = {
 			localId: constants.CONTACTS_VIEW.VIEW_IDS.LIST_ID,
 			view: "list",
@@ -23,16 +25,21 @@ export default class ContactsView extends JetView {
 			view: "button",
 			type: "icon",
 			icon: "webix_icon wxi-plus",
-			label: "Add Contact",
+			label: _("Add contact"),
 			align: "center",
 			click: () => this.show("form")
 		};
 
 		const filter = {
 			view: "text",
-			placeholder: "type to find matching contacts",
-			// label: "Address",
-			name: "contactsFilter"
+			placeholder: _("type to find matching contacts"),
+			localId: constants.CONTACTS_VIEW.VIEW_IDS.FILTER_ID,
+			name: "contactsFilter",
+			on: {
+				onTimedKeyPress: () => {
+					this.filterContactList();
+				}
+			}
 		};
 
 		const ui = {
@@ -66,6 +73,51 @@ export default class ContactsView extends JetView {
 			</div>
 		`;
 		return res;
+	}
+
+	filterContactList() {
+		const contactsList = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.LIST_ID);
+		const contactsFilter = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.FILTER_ID);
+		// console.log("filter Contact");
+		const filterValue = contactsFilter.getValue().toLowerCase().trim();
+		const keys = ["FirstName", "LastName", "Job", "Company", "Website", "Address", "Email", "Skype"];
+		contactsList.filter((obj) => {
+			let match = false;
+			keys.forEach((key) => {
+				if (obj[key].toString().toLowerCase().indexOf(filterValue) !== -1) match = true;
+			});
+			// console.log("match=", match);
+			if (match) return true;
+			if (obj.Birthday && (filterValue.length === 5)) {
+				const filterYear = +filterValue.slice(1);
+				if (!Number.isNaN(filterYear)) {
+					const birthdayYear = obj.BirthdayObj.getFullYear();
+					const condition = filterValue[0];
+					switch (condition) {
+						case "<":
+							if (birthdayYear < filterYear) match = true;
+							break;
+						case ">":
+							if (birthdayYear > filterYear) match = true;
+							break;
+						case "=":
+							if (birthdayYear === filterYear) match = true;
+							break;
+						default: break;
+					}
+				}
+			}
+			if (obj.Phone && (obj.Phone === filterValue)) return true;
+			if (obj.StatusID) {
+				const status = statusesCollection.getItem(obj.StatusID);
+				if (status && status.Value.toLowerCase().indexOf(filterValue) !== -1) {
+					return true;
+				}
+			}
+
+			return match;
+		});
+		contactsList.select(contactsList.getFirstId());
 	}
 
 	init() {
