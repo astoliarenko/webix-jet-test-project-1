@@ -66,6 +66,7 @@ export default class SettingsTableView extends JetView {
 					// console.log("щелчок по колонке иконки");
 					// console.log("id колонки", id.row);
 					this.app.callEvent(constants.EVENTS.GET_DATA_FROM_POPUP, [id]);
+					this.app.callEvent(constants.EVENTS.SHOW_POPUP);
 				}
 				// constants.CSS.ACTIVITIES_VIEW.REMOVE_ITEM_DATATABLE: () => {
 				// "edit-datatable": (e, id) => this.window.showWindow(id, this.hideInfo)

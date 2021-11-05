@@ -26,7 +26,8 @@ export default {
 	},
 	SETTINGS_VIEW: {
 		VIEW_IDS: {
-			DATATABLE_ID: "datatableId"
+			DATATABLE_ID: "datatableId",
+			POPUP_LIST_ID: "popupListId"
 		}
 	},
 	EDIT_WINDOW_VIEW: {
@@ -43,7 +44,8 @@ export default {
 	EVENTS: {
 		FILTER_ACTIVITIESTABLE: "filterActivitiesTable",
 		SELECT_CONTACT: "selectContact",
-		GET_DATA_FROM_POPUP: "getDataFromPopup"
+		GET_DATA_FROM_POPUP: "getDataFromPopup",
+		SHOW_POPUP: "showPopup"
 	},
 	CSS: {
 		ACTIVITIES_VIEW: {

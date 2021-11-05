@@ -235,8 +235,10 @@ export default class ContactsFormView extends JetView {
 		const formValues = form.getValues();
 
 		formValues.Photo = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.CONTACT_PHOTO_ID).getValues().src;
-		formValues.Birthday = webix.Date
-			.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(formValues.BirthdayObj);
+		if (formValues.BirthdayObj) {
+			formValues.Birthday = webix.Date
+				.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(formValues.BirthdayObj);
+		}
 
 		// console.log("Birthday before save", formValues.Birthday);
 		// console.log("formValues before save", formValues);

@@ -1,19 +1,19 @@
 import {JetView} from "webix-jet";
 
-// import constants from "../../constants";
+import constants from "../../constants";
 
 export default class SettingsPopupView extends JetView {
 	config() {
 		const dtPopup = {
 			view: "popup",
-			id: "myPopup",
-			width: 300,
+			// localId: dtPopupId,
+			width: 100,
 			head: "Icon",
 			body: {
 				view: "list",
-				id: "pop-list",
+				localId: constants.SETTINGS_VIEW.VIEW_IDS.POPUP_LIST_ID,
 				autoheight: true,
-				template: "#title#",
+				template: "<span class ='webix_icon wxi-#title#'></span> #title#",
 				select: true,
 				scroll: false,
 				data: [
@@ -24,7 +24,12 @@ export default class SettingsPopupView extends JetView {
 					{id: 5, title: "minus"},
 					{id: 6, title: "user"},
 					{id: 7, title: "clock"}
-				]
+				],
+				on: {
+					// onAfterSelect: (id) => {
+					// 	console.log("выбран элемент попапа", id);
+					// }
+				}
 			}
 		};
 
@@ -37,8 +42,9 @@ export default class SettingsPopupView extends JetView {
 
 	init() {
 		// this.on(this.app, constants.EVENTS.GET_DATA_FROM_POPUP, (id) => {
-		// 	// console.log("Данные из popup", this.$$("pop-list").data.pull);
-		// 	// console.log("id=", id);
+		// 	console.log("Данные из popup", this
+		// .$$(constants.SETTINGS_VIEW.VIEW_IDS.POPUP_LIST_ID).data.pull);
+		// 	console.log("id=", id);
 		// });
 	}
 }
