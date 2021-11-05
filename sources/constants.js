@@ -42,12 +42,7 @@ export default {
 	},
 	EVENTS: {
 		FILTER_ACTIVITIESTABLE: "filterActivitiesTable",
-		SELECT_CONTACT: "selectContact"
-	},
-	CSS: {
-		ACTIVITIES_VIEW: {
-			EDIT_DATATABLE: "edit-datatable",
-			REMOVE_ITEM_DATATABLE: "remove-item-datatable"
-		}
+		SELECT_CONTACT: "selectContact",
+		GET_SELECTED_TAB: "getSelectedTab"
 	}
 };

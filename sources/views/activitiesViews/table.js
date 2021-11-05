@@ -74,34 +74,30 @@ export default class ActivitiesTableView extends JetView {
 					id: "edit",
 					width: iconColumnWidth,
 					header: "",
-					template:
-					`<span class ='webix_icon wxi-pencil ${constants.CSS.ACTIVITIES_VIEW.EDIT_DATATABLE}'></span>`
+					template: "<span class ='webix_icon wxi-pencil edit-datatable'></span>"
 				},
 				{
 					id: "delete",
 					header: "",
 					width: iconColumnWidth,
-					template:
-					`<span class ='webix_icon wxi-trash ${constants.CSS.ACTIVITIES_VIEW.REMOVE_ITEM_DATATABLE}'></span>`
+					template: "<span class ='webix_icon wxi-trash remove-item-datatable'></span>"
 				}
 			],
 			scrollX: false,
 			// select: true,
 			onClick: {
 				"remove-item-datatable": (e, id) => {
-				// constants.CSS.ACTIVITIES_VIEW.REMOVE_ITEM_DATATABLE: function (e, id) {
 					webix.confirm(_("Delete this activity?")).then(() => {
 						activitiesCollection.remove(id);
 					});
 					return false;
 				},
-				// constants.CSS.ACTIVITIES_VIEW.REMOVE_ITEM_DATATABLE: () => {
 				"edit-datatable": (e, id) => this.window.showWindow(id, this.hideInfo)
 			},
 			on: {
-				onAfterFilter: () => this.filterTable(this.contactId)
-				// onAfterFilter: () => (this.contactId ? this.getRoot()
-				// .filter("#ContactID#", this.contactId, true) : false)
+				onAfterFilter: () => {
+					if (this.contactId) this.filterTable(this.contactId);
+				}
 			}
 		};
 
@@ -115,7 +111,6 @@ export default class ActivitiesTableView extends JetView {
 	filterDtByTabbar(tabbarId) {
 		const table = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID);
 		if (tabbarId) {
-			// table.filter(obj => obj, null, true);
 			const currentDateObj = new Date();
 			const currentDateStr = webix.Date
 				.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(currentDateObj);
@@ -133,6 +128,7 @@ export default class ActivitiesTableView extends JetView {
 				.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(endCurWeekObj);
 			const matchItem = (obj) => {
 				const activityDateStr = obj.DueDate.slice(0, 10);
+				// eslint-disable-next-line default-case
 				switch (tabbarId) {
 					case "overdue":
 						return obj.DateObj < currentDateObj;
@@ -148,14 +144,16 @@ export default class ActivitiesTableView extends JetView {
 					case "thisWeek":
 						return (startCurWeekStr <= activityDateStr) && (activityDateStr < endCurWeekStr);
 					case "thisMonth":
-						return obj.DateObj.getMonth() === currentMonth;
-					default:
-						return obj;
+						if (obj.DateObj) return obj.DateObj.getMonth() === currentMonth;
+						break;
 				}
+				return obj;
 			};
 
-			table.filter(obj => matchItem(obj), null, false);
+			// table.filter(obj => matchItem(obj), null, false);
+			table.filter(obj => matchItem(obj), null, true);
 		}
+		// else table.filter(obj => obj, null, true);
 	}
 
 	filterTable(id) {
@@ -184,7 +182,13 @@ export default class ActivitiesTableView extends JetView {
 	init(view) {
 		this.window = this.ui(EditWindowView);
 		view.sync(activitiesCollection);
-		this.on(activitiesCollection, "onAfterAdd", () => this.filterTable(this.contactId));
+		this.on(activitiesCollection, "onAfterAdd", () => {
+			if (this.contactId) this.filterTable(this.contactId);
+			// else {
+			// 	view.filterByAll();
+			// 	// и по таббару
+			// }
+		});
 		this.on(activitiesCollection, "onAfterDelete", () => this.filterTable(this.contactId));
 		this.on(activitiesCollection, "onDataUpdate", () => this.filterTable(this.contactId));
 	}

@@ -49,8 +49,7 @@ export default class SettingsTableView extends JetView {
 					id: "delete",
 					header: "",
 					width: iconColumnWidth,
-					template:
-					"<span class ='webix_icon wxi-trash remove-item-datatable'></span>"
+					template: "<span class ='webix_icon wxi-trash remove-item-datatable'></span>"
 				}
 			],
 			scrollX: false,
