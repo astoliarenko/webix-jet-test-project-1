@@ -1,9 +1,7 @@
 import {JetView} from "webix-jet";
 
-import constants from "../constants";
 import activityTypeCollection from "../models/activityTypeCollection";
 import statusesCollection from "../models/statusesCollection";
-import SettingsPopupView from "./settingsViews/popup";
 import SettingsTableView from "./settingsViews/table";
 
 export default class SettingsView extends JetView {
@@ -58,13 +56,5 @@ export default class SettingsView extends JetView {
 		};
 
 		return ui;
-	}
-
-	init() {
-		this.popup = this.ui(SettingsPopupView);
-		this.on(this.app, constants.EVENTS.SHOW_POPUP, () => {
-			// console.log("Show");
-			this.popup.showPopup();
-		});
 	}
 }

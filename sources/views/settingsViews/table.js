@@ -1,7 +1,6 @@
 import {JetView} from "webix-jet";
 
 import constants from "../../constants";
-// import EditWindowView from "./editwindow";
 
 export default class SettingsTableView extends JetView {
 	constructor(app, collection) {
@@ -28,7 +27,17 @@ export default class SettingsTableView extends JetView {
 					id: "Icon",
 					header: _("Icon"),
 					template: "<span class ='webix_icon wxi-#Icon#'</span>",
-					width: iconColumnWidth
+					width: iconColumnWidth,
+					editor: "richselect",
+					options: [
+						{id: "pencil", value: "pencil"},
+						{id: "calendar", value: "calendar"},
+						{id: "alert", value: "alert"},
+						{id: "plus", value: "plus"},
+						{id: "minus", value: "minus"},
+						{id: "user", value: "user"},
+						{id: "clock", value: "clock"}
+					]
 				},
 				{
 					id: "value",
@@ -36,14 +45,6 @@ export default class SettingsTableView extends JetView {
 					editor: "text",
 					fillspace: true
 				},
-				// {
-				// 	id: "edit",
-				// 	width: iconColumnWidth,
-				// 	header: "",
-				// 	template:
-				// 	`<span class ='webix_icon wxi-pencil
-				//  ${constants.CSS.ACTIVITIES_VIEW.EDIT_DATATABLE}'></span>`
-				// },
 				{
 					id: "delete",
 					header: "",
@@ -60,22 +61,8 @@ export default class SettingsTableView extends JetView {
 						this.dataCollection.remove(id);
 					});
 					return false;
-				},
-				"list-column-icon": (e, id) => {
-					// this.popup.show();
-					// console.log("щелчок по колонке иконки");
-					// console.log("id колонки", id.row);
-					this.app.callEvent(constants.EVENTS.GET_DATA_FROM_POPUP, [id]);
-					this.app.callEvent(constants.EVENTS.SHOW_POPUP);
 				}
-				// constants.CSS.ACTIVITIES_VIEW.REMOVE_ITEM_DATATABLE: () => {
-				// "edit-datatable": (e, id) => this.window.showWindow(id, this.hideInfo)
 			},
-			// on: {
-			// 	onAfterFilter: () => this.filterTable(this.contactId)
-			// 	// onAfterFilter: () => (this.contactId ? this.getRoot()
-			// 	// .filter("#ContactID#", this.contactId, true) : false)
-			// }
 			rules: {
 				value: webix.rules.isNotEmpty
 			}
@@ -86,12 +73,5 @@ export default class SettingsTableView extends JetView {
 
 	init(view) {
 		view.sync(this.dataCollection);
-		this.on(this.app, constants.EVENTS.CHANGE_ICON, (itemId, iconId) => {
-			const item = this.dataCollection.getItem(itemId);
-			if (iconId) item.Icon = iconId;
-			this.dataCollection.updateItem(item.id, item);
-			// console.log("Данные из popup", this.$$().data.pull);
-			// console.log("id=", id);
-		});
 	}
 }

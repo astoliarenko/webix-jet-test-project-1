@@ -112,15 +112,9 @@ export default class ActivitiesTableView extends JetView {
 		this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID).filterByAll();
 	}
 
-	filterTable(id, externalFilter) {
-		// 	if third param in .filter() set to true, each next filtering criteria
-		// will be applied to the already filtered list
+	filterDtByTabbar(tabbarId) {
 		const table = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID);
-
-		if (id) {
-			table.filter("#ContactID#", this.contactId, true);
-		}
-		else if (externalFilter) {
+		if (tabbarId) {
 			// table.filter(obj => obj, null, true);
 			const currentDateObj = new Date();
 			const currentDateStr = webix.Date
@@ -139,7 +133,7 @@ export default class ActivitiesTableView extends JetView {
 				.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(endCurWeekObj);
 			const matchItem = (obj) => {
 				const activityDateStr = obj.DueDate.slice(0, 10);
-				switch (externalFilter) {
+				switch (tabbarId) {
 					case "overdue":
 						return obj.DateObj < currentDateObj;
 					case "completed":
@@ -161,6 +155,16 @@ export default class ActivitiesTableView extends JetView {
 			};
 
 			table.filter(obj => matchItem(obj), null, false);
+		}
+	}
+
+	filterTable(id) {
+		// 	if third param in .filter() set to true, each next filtering criteria
+		// will be applied to the already filtered list
+		const table = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID);
+
+		if (id) {
+			table.filter("#ContactID#", this.contactId, true);
 		}
 	}
 

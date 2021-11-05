@@ -38,7 +38,7 @@ export default class ActivitiesView extends JetView {
 				onAfterTabClick: (tabbarId) => {
 					// таблица.filterByAll();
 					// table.filterDtByAll();
-					table.filterTable(null, tabbarId);
+					table.filterDtByTabbar(tabbarId);
 				}
 			}
 		};
