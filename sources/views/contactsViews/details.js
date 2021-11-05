@@ -110,6 +110,8 @@ export default class ContactsDetailsView extends JetView {
 		const photoUrl = Photo || "./sources/img/man.png";
 		const item = statusesCollection.getItem(StatusID);
 		const Status = item ? item.Value : "unknown";
+		let birthday;
+		if (Birthday) birthday = Birthday.length === 10 ? Birthday : Birthday.slice(0, 10);
 		const res = `
 			<div class='details_container df f-d-col'>
 				<h2 class='details_header'>${FirstName} ${LastName}</h2>
@@ -138,7 +140,7 @@ export default class ContactsDetailsView extends JetView {
 						</div>
 						<div class='details-item df f-d-row'>
 							<i class="icon-calendar"></i>
-							<span>${Birthday}</span>
+							<span>${birthday}</span>
 						</div>
 					</div>
 				</div>

@@ -45,7 +45,8 @@ export default {
 		FILTER_ACTIVITIESTABLE: "filterActivitiesTable",
 		SELECT_CONTACT: "selectContact",
 		GET_DATA_FROM_POPUP: "getDataFromPopup",
-		SHOW_POPUP: "showPopup"
+		SHOW_POPUP: "showPopup",
+		CHANGE_ICON: "changeIcon"
 	},
 	CSS: {
 		ACTIVITIES_VIEW: {

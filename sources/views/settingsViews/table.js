@@ -86,5 +86,12 @@ export default class SettingsTableView extends JetView {
 
 	init(view) {
 		view.sync(this.dataCollection);
+		this.on(this.app, constants.EVENTS.CHANGE_ICON, (itemId, iconId) => {
+			const item = this.dataCollection.getItem(itemId);
+			if (iconId) item.Icon = iconId;
+			this.dataCollection.updateItem(item.id, item);
+			// console.log("Данные из popup", this.$$().data.pull);
+			// console.log("id=", id);
+		});
 	}
 }

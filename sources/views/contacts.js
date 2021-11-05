@@ -91,7 +91,7 @@ export default class ContactsView extends JetView {
 			if (obj.Birthday && (filterValue.length === 5)) {
 				const filterYear = +filterValue.slice(1);
 				if (!Number.isNaN(filterYear)) {
-					const birthdayYear = obj.BirthdayObj.getFullYear();
+					const birthdayYear = obj.BirthObj.getFullYear();
 					const condition = filterValue[0];
 					switch (condition) {
 						case "<":

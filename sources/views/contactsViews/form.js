@@ -173,7 +173,7 @@ export default class ContactsFormView extends JetView {
 						{
 							view: "datepicker",
 							value: "",
-							name: "BirthdayObj",
+							name: "BirthObj",
 							label: _("Birthday"),
 							labelWidth,
 							timepicker: false,
@@ -235,13 +235,12 @@ export default class ContactsFormView extends JetView {
 		const formValues = form.getValues();
 
 		formValues.Photo = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.CONTACT_PHOTO_ID).getValues().src;
-		if (formValues.BirthdayObj) {
-			formValues.Birthday = webix.Date
-				.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(formValues.BirthdayObj);
-		}
 
-		// console.log("Birthday before save", formValues.Birthday);
-		// console.log("formValues before save", formValues);
+		if (formValues.BirthObj) {
+			formValues.Birthday = webix.Date
+				.dateToStr(constants.ACTIVITIES_VIEW.DATE_SERVER_FORMAT)(formValues.BirthObj);
+		}
+		else formValues.Birthday = "";
 
 		if (this.contactId) {
 			contactsCollection.updateItem(formValues.id, formValues);

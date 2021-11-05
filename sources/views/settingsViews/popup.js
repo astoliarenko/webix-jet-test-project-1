@@ -9,6 +9,7 @@ export default class SettingsPopupView extends JetView {
 			// localId: dtPopupId,
 			width: 100,
 			head: "Icon",
+			modal: true,
 			body: {
 				view: "list",
 				localId: constants.SETTINGS_VIEW.VIEW_IDS.POPUP_LIST_ID,
@@ -24,12 +25,17 @@ export default class SettingsPopupView extends JetView {
 					{id: 5, title: "minus"},
 					{id: 6, title: "user"},
 					{id: 7, title: "clock"}
-				],
-				on: {
-					// onAfterSelect: (id) => {
-					// 	console.log("выбран элемент попапа", id);
-					// }
-				}
+				]
+				// ],
+				// on: {
+				// 	onAfterSelect: (id) => {
+				// 		console.log("выбран элемент попапа", id);
+				// 		console.log("this.getRoot()", this.getRoot());
+				// 		this.$$(constants.SETTINGS_VIEW.VIEW_IDS.POPUP_LIST_ID).unselectAll();
+				// 		this.getRoot().hide();
+				// 		this.callEvent(constants.EVENTS.CHANGE_ICON, [id]);
+				// 	}
+				// }
 			}
 		};
 
