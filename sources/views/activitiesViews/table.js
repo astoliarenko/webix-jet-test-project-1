@@ -10,6 +10,7 @@ export default class ActivitiesTableView extends JetView {
 	constructor(app, hide) {
 		super(app);
 		this.hideInfo = hide;
+		this.tabbarValue = "all";
 	}
 
 	config() {
@@ -96,7 +97,10 @@ export default class ActivitiesTableView extends JetView {
 			},
 			on: {
 				onAfterFilter: () => {
-					if (this.contactId) this.filterTable(this.contactId);
+					this.filterTable(this.contactId);
+					setTimeout(() => {
+						this.filterDtByTabbar(this.tabbarValue);
+					}, 50);
 				}
 			}
 		};
@@ -110,7 +114,9 @@ export default class ActivitiesTableView extends JetView {
 
 	filterDtByTabbar(tabbarId) {
 		const table = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID);
+
 		if (tabbarId) {
+			this.tabbarValue = tabbarId;
 			const currentDateObj = new Date();
 			const currentDateStr = webix.Date
 				.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(currentDateObj);
@@ -182,14 +188,34 @@ export default class ActivitiesTableView extends JetView {
 	init(view) {
 		this.window = this.ui(EditWindowView);
 		view.sync(activitiesCollection);
+		// const filterAfterChangeData = () => {
+		// 	this.filterTable(this.contactId);
+		// 	if (!this.contactId) {
+		// 		view.filterByAll();
+		// 		this.filterDtByTabbar(this.tabbarValue);
+		// 		// и по таббару
+		// 	}
+		// };
 		this.on(activitiesCollection, "onAfterAdd", () => {
-			if (this.contactId) this.filterTable(this.contactId);
-			// else {
-			// 	view.filterByAll();
-			// 	// и по таббару
-			// }
+			this.filterTable(this.contactId);
+			if (!this.contactId) {
+				view.filterByAll();
+				this.filterDtByTabbar(this.tabbarValue);
+			}
 		});
-		this.on(activitiesCollection, "onAfterDelete", () => this.filterTable(this.contactId));
-		this.on(activitiesCollection, "onDataUpdate", () => this.filterTable(this.contactId));
+		this.on(activitiesCollection, "onAfterDelete", () => {
+			this.filterTable(this.contactId);
+			if (!this.contactId) {
+				view.filterByAll();
+				this.filterDtByTabbar(this.tabbarValue);
+			}
+		});
+		this.on(activitiesCollection, "onDataUpdate", () => {
+			this.filterTable(this.contactId);
+			if (!this.contactId) {
+				view.filterByAll();
+				this.filterDtByTabbar(this.tabbarValue);
+			}
+		});
 	}
 }

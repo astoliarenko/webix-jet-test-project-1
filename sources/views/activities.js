@@ -8,6 +8,8 @@ export default class ActivitiesView extends JetView {
 	config() {
 		const _ = this.app.getService("locale")._;
 
+		this.tabbarValue = "all";
+
 		const btnAdd = {
 			localId: constants.ACTIVITIES_VIEW.VIEW_IDS.BTN_SAVE_ID,
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
@@ -22,6 +24,7 @@ export default class ActivitiesView extends JetView {
 
 		const activitiesTabbar = {
 			borderless: true,
+			localId: constants.ACTIVITIES_VIEW.VIEW_IDS.TABBAR_ID,
 			view: "tabbar",
 			options: [
 				{id: "all", value: _("All")},
@@ -37,6 +40,7 @@ export default class ActivitiesView extends JetView {
 			on: {
 				onAfterTabClick: (tabbarId) => {
 					// таблица.filterByAll();
+					this.tabbarValue = tabbarId;
 					table.filterDtByAll();
 					table.filterDtByTabbar(tabbarId);
 				}
@@ -63,5 +67,11 @@ export default class ActivitiesView extends JetView {
 
 	init() {
 		this.window = this.ui(EditWindowView);
+		// this.on(this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.TABBAR_ID),
+		// 	constants.EVENTS.GET_SELECTED_TAB,
+		// 	() => {
+		// 		console.log("this.tabbarValue", this.tabbarValue);
+		// 		return this.tabbarValue;
+		// 	});
 	}
 }

@@ -18,7 +18,8 @@ export default {
 		VIEW_IDS: {
 			DATATABLE_ID: "datatableId",
 			BTN_SAVE_ID: "saveInfo",
-			RICHSELECT_CONTACT_ID: "richselectContactId"
+			RICHSELECT_CONTACT_ID: "richselectContactId",
+			TABBAR_ID: "activityTabbarId"
 		},
 		DATE_FORMAT: "%Y-%m-%d",
 		TIME_FORMAT: "%H:%i",

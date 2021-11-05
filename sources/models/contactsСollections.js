@@ -7,9 +7,6 @@ const contactsCollection = new webix.DataCollection({
 		$init: (obj) => {
 			obj.value = `${obj.FirstName} ${obj.LastName}`;
 			obj.BirthObj = webix.Date.strToDate(constants.ACTIVITIES_VIEW.DATE_FORMAT)(obj.Birthday);
-			// console.log("Birthday=", obj.Birthday);
-			// console.log("BirthdayObj=", obj.BirthdayObj);
-			// неправильно сохраняет Birthday
 		}
 	}
 });
