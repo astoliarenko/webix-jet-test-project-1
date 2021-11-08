@@ -101,22 +101,11 @@ export default class ContactsView extends JetView {
 				}
 				return false;
 			}
-			let match = false;
-			// keys.forEach((key) => {
-			// 	if (obj[key].toString().toLowerCase().indexOf(filterValue) !== -1) {
-			// 		match = true;
-			// 		return true;
-			// 	}
-			// 	return false;
-			// });
 			for (let i = 0; i < keys.length; i++) {
 				if (obj[keys[i]].toString().toLowerCase().indexOf(filterValue) !== -1) {
-					match = true;
-					break;
+					return true;
 				}
 			}
-			if (match) return true;
-			// if (obj.Phone.indexOf(filterValue) !== -1) return true;
 			if (obj.StatusID) {
 				const status = statusesCollection.getItem(obj.StatusID);
 				if (status && status.Value.toLowerCase().indexOf(filterValue) !== -1) {
@@ -131,7 +120,6 @@ export default class ContactsView extends JetView {
 
 	init() {
 		const list = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.LIST_ID);
-		// const clientsDetailsTemplate = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.TEMPLATE_ID);
 
 		this.on(this.app, constants.EVENTS.SELECT_CONTACT, (id) => {
 			list.unselectAll();

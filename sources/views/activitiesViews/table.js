@@ -134,7 +134,7 @@ export default class ActivitiesTableView extends JetView {
 					case "thisWeek":
 					// start week - Sunday, end - Saturday, оставил как в дейтпикере
 					{
-						const startWeek = webix.Date.weekStart(webix.Date.dayStart(new Date()));
+						const startWeek = webix.Date.weekStart(new Date());
 						const endWeek = webix.Date.add(startWeek, 6, "day", true);
 						return (startWeek <= obj.DateObj && obj.DateObj <= endWeek);
 					}
