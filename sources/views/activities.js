@@ -11,7 +11,6 @@ export default class ActivitiesView extends JetView {
 		// const spacerMaxWidth = 400;
 		// const tabbarMaxWidth = 1000;
 
-		this.tabbarValue = "all";
 
 		const btnAdd = {
 			localId: constants.ACTIVITIES_VIEW.VIEW_IDS.BTN_SAVE_ID,
@@ -44,8 +43,6 @@ export default class ActivitiesView extends JetView {
 			value: "all",
 			on: {
 				onAfterTabClick: (tabbarId) => {
-					// таблица.filterByAll();
-					this.tabbarValue = tabbarId;
 					table.filterDtByAll();
 					table.filterDtByTabbar(tabbarId);
 				}
