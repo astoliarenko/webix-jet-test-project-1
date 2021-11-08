@@ -79,10 +79,28 @@ export default class ContactsView extends JetView {
 	filterContactList() {
 		const contactsList = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.LIST_ID);
 		const contactsFilter = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.FILTER_ID);
-		// console.log("filter Contact");
 		const filterValue = contactsFilter.getValue().toLowerCase().trim();
+		const condition = filterValue[0];
 		const keys = ["FirstName", "LastName", "Job", "Company", "Website", "Address", "Email", "Skype"];
 		contactsList.filter((obj) => {
+			if (condition === "<" || condition === ">" || condition === "=") {
+				if (obj.Birthday && (filterValue.length === 5)) {
+					const filterYear = +filterValue.slice(1);
+					if (!Number.isNaN(filterYear) && filterYear > 1969 && filterYear < 2040) {
+						const birthdayYear = obj.BirthObj.getFullYear();
+						switch (condition) {
+							case "<":
+								return birthdayYear < filterYear;
+							case ">":
+								return birthdayYear > filterYear;
+							case "=":
+								return birthdayYear === filterYear;
+							default: break;
+						}
+					}
+				}
+				return false;
+			}
 			let match = false;
 			keys.forEach((key) => {
 				if (obj[key].toString().toLowerCase().indexOf(filterValue) !== -1) {
@@ -92,22 +110,6 @@ export default class ContactsView extends JetView {
 				return false;
 			});
 			if (match) return true;
-			if (obj.Birthday && (filterValue.length === 5)) {
-				const filterYear = +filterValue.slice(1);
-				if (!Number.isNaN(filterYear) && filterYear > 1969 && filterYear < 2040) {
-					const birthdayYear = obj.BirthObj.getFullYear();
-					const condition = filterValue[0];
-					switch (condition) {
-						case "<":
-							return birthdayYear < filterYear;
-						case ">":
-							return birthdayYear > filterYear;
-						case "=":
-							return birthdayYear === filterYear;
-						default: break;
-					}
-				}
-			}
 			if (filterValue.indexOf(obj.Phone) !== -1) return true;
 			if (obj.StatusID) {
 				const status = statusesCollection.getItem(obj.StatusID);
