@@ -99,7 +99,7 @@ export default class ActivitiesTableView extends JetView {
 				onAfterFilter: () => {
 					this.filterDtByContact(this.contactId);
 					setTimeout(() => {
-						this.filterDtByTabbar(this.tabbarValue);
+						if (this.tabbarValue !== "all") this.filterDtByTabbar(this.tabbarValue);
 					}, 50);
 				}
 			}
@@ -110,10 +110,6 @@ export default class ActivitiesTableView extends JetView {
 
 	filterDtByAll() {
 		this.table.filterByAll();
-	}
-
-	filterDt() {
-		this.table.filter();
 	}
 
 	filterDtByTabbar(tabbarId) {
