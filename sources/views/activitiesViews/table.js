@@ -182,34 +182,16 @@ export default class ActivitiesTableView extends JetView {
 
 	init(view) {
 		this.window = this.ui(EditWindowView);
+
 		view.sync(activitiesCollection);
-		// const filterAfterChangeData = () => {
-		// 	this.filterTable(this.contactId);
-		// 	if (!this.contactId) {
-		// 		view.filterByAll();
-		// 		this.filterDtByTabbar(this.tabbarValue);
-		// 		// и по таббару
-		// 	}
-		// };
-		this.on(activitiesCollection, "onAfterAdd", () => {
-			this.filterDtByContact(this.contactId);
-			if (!this.contactId) {
-				view.filterByAll();
-				this.filterDtByTabbar(this.tabbarValue);
-			}
-		});
-		this.on(activitiesCollection, "onAfterDelete", () => {
-			this.filterDtByContact(this.contactId);
-			if (!this.contactId) {
-				view.filterByAll();
-				this.filterDtByTabbar(this.tabbarValue);
-			}
-		});
-		this.on(activitiesCollection, "onDataUpdate", () => {
-			this.filterDtByContact(this.contactId);
-			if (!this.contactId) {
-				view.filterByAll();
-				this.filterDtByTabbar(this.tabbarValue);
+
+		this.on(activitiesCollection.data, "onStoreUpdated", (id, obj, mode) => {
+			if (mode === "add" || mode === "delete" || mode === "update") {
+				this.filterDtByContact(this.contactId);
+				if (!this.contactId) {
+					view.filterByAll();
+					this.filterDtByTabbar(this.tabbarValue);
+				}
 			}
 		});
 	}
