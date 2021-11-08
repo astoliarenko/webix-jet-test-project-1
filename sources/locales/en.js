@@ -59,5 +59,10 @@ export default {
 	Size: "Size",
 	"Change date": "Change date",
 	"Edit contact": "Edit contact",
-	"Delete this contact and related activities, files?": "Delete this contact and related activities, files?"
+	"Delete this contact and related activities, files?": "Delete this contact and related activities, files?",
+	"Add status": "Add status",
+	"Edit activity": "Edit activity",
+	"Add new": "Add new",
+	"Add new status": "Add new status",
+	"Add new activity type": "Add new activity type"
 };

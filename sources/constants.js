@@ -27,7 +27,8 @@ export default {
 	},
 	SETTINGS_VIEW: {
 		VIEW_IDS: {
-			DATATABLE_ID: "datatableId"
+			DATATABLE_ID: "datatableId",
+			FORM_ID: "settingsForm"
 		}
 	},
 	EDIT_WINDOW_VIEW: {

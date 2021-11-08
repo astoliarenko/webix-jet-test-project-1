@@ -3,6 +3,7 @@ import {JetView} from "webix-jet";
 import activityTypeCollection from "../models/activityTypeCollection";
 import statusesCollection from "../models/statusesCollection";
 import SettingsTableView from "./settingsViews/table";
+import AddWindowView from "./settingsViews/window";
 
 export default class SettingsView extends JetView {
 	config() {
@@ -12,6 +13,7 @@ export default class SettingsView extends JetView {
 
 		const settingsBtnsWidth = 100;
 		const spacerMaxWidth = 50;
+		const btnsAddWidth = 200;
 
 		const settingsBtns = {
 			width: settingsBtnsWidth,
@@ -25,6 +27,28 @@ export default class SettingsView extends JetView {
 			click() {
 				param.setLang(this.getValue());
 			}
+		};
+
+		const btnAddNewStatus = {
+			width: btnsAddWidth,
+			view: "button",
+			css: "webix_primary",
+			type: "icon",
+			icon: "webix_icon wxi-plus",
+			label: _("Add new"),
+			// align: "center",
+			click: () => this.windowStatus.showWindow()
+		};
+
+		const btnAddNewActType = {
+			width: btnsAddWidth,
+			view: "button",
+			css: "webix_primary",
+			type: "icon",
+			icon: "webix_icon wxi-plus",
+			label: _("Add new"),
+			// align: "center",
+			click: () => this.windowActivityType.showWindow()
 		};
 
 		const headerStatusesDt = {
@@ -46,17 +70,22 @@ export default class SettingsView extends JetView {
 			rows: [
 				{
 					cols: [
-						{},
-						settingsBtns
+						settingsBtns,
+						{}
 					]
 				},
-				{rows: [headerStatusesDt, statusesDt]},
+				{rows: [{cols: [headerStatusesDt, btnAddNewStatus]}, statusesDt]},
 				{maxHeight: spacerMaxWidth},
-				{rows: [headerActivityTypeDt, activityTypeDt]}
+				{rows: [{cols: [headerActivityTypeDt, btnAddNewActType]}, activityTypeDt]}
 				// {}
 			]
 		};
 
 		return ui;
+	}
+
+	init() {
+		this.windowStatus = this.ui(new AddWindowView(this.app, statusesCollection, "status"));
+		this.windowActivityType = this.ui(new AddWindowView(this.app, activityTypeCollection, "activity type"));
 	}
 }

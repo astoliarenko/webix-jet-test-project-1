@@ -59,5 +59,10 @@ export default {
 	Size: "Размер",
 	"Change date": "Изменить дату",
 	"Edit contact": "Редактировать контакт",
-	"Delete this contact and related activities, files?": "Удалить контакт и все связанные с ним активности и файлы?"
+	"Delete this contact and related activities, files?": "Удалить контакт и все связанные с ним активности и файлы?",
+	"Add status": "Добавить статус",
+	"Edit activity": "Редактировать активность",
+	"Add new": "Добавить новый",
+	"Add new status": "Добавить новый статус",
+	"Add new activity type": "Добавить тип активности"
 };

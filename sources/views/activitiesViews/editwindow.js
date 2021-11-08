@@ -7,6 +7,8 @@ import contactsCollection from "../../models/contactsСollections";
 
 export default class EditWindowView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		const btnWidth = 150;
 
 		const btnSave = {
@@ -22,7 +24,7 @@ export default class EditWindowView extends JetView {
 			view: "button",
 			width: btnWidth,
 			localId: constants.EDIT_WINDOW_VIEW.VIEW_IDS.BTN_CANCEL_ID,
-			value: "Cancel",
+			value: _("Cancel"),
 			click: () => {
 				const form = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.FORM_ID);
 				form.clear();
@@ -35,7 +37,7 @@ export default class EditWindowView extends JetView {
 			view: "checkbox",
 			css: "cursor-pointer",
 			localId: constants.EDIT_WINDOW_VIEW.VIEW_IDS.CHECKBOX_ID,
-			label: "Completed",
+			label: _("Completed"),
 			name: "State",
 			checkValue: "Close",
 			uncheckValue: "Open"
@@ -49,12 +51,12 @@ export default class EditWindowView extends JetView {
 					rows: [
 						{
 							view: "textarea",
-							label: "Details",
+							label: _("Details"),
 							name: "Details"
 						},
 						{
 							view: "richselect",
-							label: "Type",
+							label: _("Type"),
 							name: "TypeID",
 							options: activityTypeCollection,
 							invalidMessage: "Cannot be empty"
@@ -62,7 +64,7 @@ export default class EditWindowView extends JetView {
 						{
 							view: "richselect",
 							localId: constants.ACTIVITIES_VIEW.VIEW_IDS.RICHSELECT_CONTACT_ID,
-							label: "Contact",
+							label: _("Contact"),
 							name: "ContactID",
 							options: contactsCollection,
 							invalidMessage: "Cannot be empty"
@@ -74,7 +76,7 @@ export default class EditWindowView extends JetView {
 									view: "datepicker",
 									value: "",
 									name: "DateObj",
-									label: "Date",
+									label: _("Date"),
 									width: 300,
 									timepicker: false,
 									format: webix.Date.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)
@@ -84,7 +86,7 @@ export default class EditWindowView extends JetView {
 									value: "",
 									name: "Time",
 									type: "time",
-									label: "Time",
+									label: _("Time"),
 									// timepicker: true,
 									width: 300,
 									format: webix.Date.dateToStr(constants.ACTIVITIES_VIEW.TIME_FORMAT)
@@ -158,6 +160,7 @@ export default class EditWindowView extends JetView {
 
 	showWindow(activityId, contactId) {
 		let activity;
+		const _ = this.app.getService("locale")._;
 
 		if (activityId) activity = activitiesCollection.getItem(activityId);
 
@@ -165,8 +168,8 @@ export default class EditWindowView extends JetView {
 		const btnSave = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.BTN_SAVE_ID);
 		const form = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.FORM_ID);
 		const richselectContact = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.RICHSELECT_CONTACT_ID);
-		const headerText = activity ? "Edit activity" : "Add activity";
-		const btnName = activity ? "Save" : "Add";
+		const headerText = activity ? _("Edit activity") : _("Add activity");
+		const btnName = activity ? _("Save") : _("Add");
 		const activityCopy = Object.assign({}, activity);
 
 		header.define("template", headerText);
