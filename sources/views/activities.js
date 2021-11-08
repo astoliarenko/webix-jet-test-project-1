@@ -46,6 +46,11 @@ export default class ActivitiesView extends JetView {
 					table.filterDtByAll();
 					table.filterDtByTabbar(tabbarId);
 				}
+				// onAfterTabClick: (tabbarId) => {
+				// 	table.filterDtByAll();
+				// 	if (tabbarId === "all") table.filterDt();
+				// 	else table.filterDtByTabbar(tabbarId);
+				// }
 			}
 		};
 

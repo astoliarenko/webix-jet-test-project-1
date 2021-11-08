@@ -81,7 +81,7 @@ export default class ContactsView extends JetView {
 		const contactsFilter = this.$$(constants.CONTACTS_VIEW.VIEW_IDS.FILTER_ID);
 		const filterValue = contactsFilter.getValue().toLowerCase().trim();
 		const condition = filterValue[0];
-		const keys = ["FirstName", "LastName", "Job", "Company", "Website", "Address", "Email", "Skype"];
+		const keys = ["FirstName", "LastName", "Job", "Company", "Website", "Address", "Email", "Skype", "Phone"];
 		contactsList.filter((obj) => {
 			if (condition === "<" || condition === ">" || condition === "=") {
 				if (obj.Birthday && (filterValue.length === 5)) {
@@ -116,7 +116,7 @@ export default class ContactsView extends JetView {
 				}
 			}
 			if (match) return true;
-			if (obj.Phone && filterValue.indexOf(obj.Phone) !== -1) return true;
+			// if (obj.Phone.indexOf(filterValue) !== -1) return true;
 			if (obj.StatusID) {
 				const status = statusesCollection.getItem(obj.StatusID);
 				if (status && status.Value.toLowerCase().indexOf(filterValue) !== -1) {

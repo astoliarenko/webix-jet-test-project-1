@@ -109,12 +109,14 @@ export default class ActivitiesTableView extends JetView {
 	}
 
 	filterDtByAll() {
-		this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID).filterByAll();
+		this.table.filterByAll();
+	}
+
+	filterDt() {
+		this.table.filter();
 	}
 
 	filterDtByTabbar(tabbarId) {
-		const table = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID);
-
 		if (tabbarId) {
 			this.tabbarValue = tabbarId;
 
@@ -152,17 +154,15 @@ export default class ActivitiesTableView extends JetView {
 				}
 			};
 
-			table.filter(obj => matchItem(obj), null, true);
+			this.table.filter(obj => matchItem(obj), null, true);
 		}
 	}
 
 	filterDtByContact(id) {
 		// 	if third param in .filter() set to true, each next filtering criteria
 		// will be applied to the already filtered list
-		const table = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID);
-
 		if (id) {
-			table.filter("#ContactID#", this.contactId, true);
+			this.table.filter("#ContactID#", this.contactId, true);
 		}
 	}
 
@@ -181,6 +181,7 @@ export default class ActivitiesTableView extends JetView {
 
 	init(view) {
 		this.window = this.ui(EditWindowView);
+		this.table = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID);
 
 		view.sync(activitiesCollection);
 
