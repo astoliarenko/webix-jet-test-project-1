@@ -98,9 +98,7 @@ export default class ActivitiesTableView extends JetView {
 			on: {
 				onAfterFilter: () => {
 					this.filterDtByContact(this.contactId);
-					// setTimeout(() => {
-					//   this.filterDtByTabbar(this.tabbarValue);
-					// }, 50);
+					this.filterDtByTabbar();
 				}
 			}
 		};
@@ -108,18 +106,17 @@ export default class ActivitiesTableView extends JetView {
 		return datatable;
 	}
 
-	filterDtByAll() {
+	filterDtByAll(tabbarId) {
+		if (tabbarId) {
+			this.tabbarValue = tabbarId;
+		}
 		this.table.filterByAll();
 	}
 
-	filterDtByTabbar(tabbarId) {
-		if (tabbarId === "all") {
-			this.table.filter();
-			this.table.filterByAll();
-		}
-		else if (tabbarId) {
-		// if (tabbarId) {
-			this.tabbarValue = tabbarId;
+	filterDtByTabbar() {
+		const tabbarId = this.tabbarValue;
+
+		if (tabbarId) {
 			// webix.Date.dayStart(obj.DateObj) откинуть время
 			// object add(object date,number inc,string mode, [boolean copy] );
 
@@ -147,10 +144,9 @@ export default class ActivitiesTableView extends JetView {
 						return (obj.DateObj.getMonth() === curDate.getMonth()
 							&& obj.DateObj.getFullYear() === curDate.getFullYear());
 					}
-					// case "all":
+					case "all":
 					default:
 						return true;
-						// table.filter();
 				}
 			};
 
@@ -166,7 +162,7 @@ export default class ActivitiesTableView extends JetView {
 		}
 	}
 
-	urlChange(view) {
+	urlChange() {
 		webix.promise.all([
 			activitiesCollection.waitData,
 			activityTypeCollection.waitData,
@@ -174,8 +170,10 @@ export default class ActivitiesTableView extends JetView {
 		])
 			.then(() => {
 				this.contactId = this.getParam("id");
-				view.filterByAll();
-				this.filterDtByContact(this.contactId);
+				if (this.contactId) {
+					this.filterDtByAll();
+					this.filterDtByContact(this.contactId);
+				}
 			});
 	}
 
