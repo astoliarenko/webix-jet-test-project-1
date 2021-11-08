@@ -58,5 +58,6 @@ export default {
 	"Delete this file?": "Delete this file?",
 	Size: "Size",
 	"Change date": "Change date",
-	"Edit contact": "Edit contact"
+	"Edit contact": "Edit contact",
+	"Delete this contact and related activities, files?": "Delete this contact and related activities, files?"
 };

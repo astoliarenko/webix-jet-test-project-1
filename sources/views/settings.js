@@ -10,9 +10,11 @@ export default class SettingsView extends JetView {
 		const _ = param._;
 		const language = param.getLang();
 
+		const settingsBtnsWidth = 100;
+		const spacerMaxWidth = 50;
+
 		const settingsBtns = {
-			width: 100,
-			localId: "idddd",
+			width: settingsBtnsWidth,
 			view: "segmented",
 			value: language,
 			// вэлью задает дефолт состояние по id из options ( en - id: "en")
@@ -20,8 +22,8 @@ export default class SettingsView extends JetView {
 				{id: "ru", value: _("RU")},
 				{id: "en", value: _("EN")}
 			],
-			click: () => {
-				param.setLang(this.$$("idddd").getValue());
+			click() {
+				param.setLang(this.getValue());
 			}
 		};
 
@@ -42,16 +44,16 @@ export default class SettingsView extends JetView {
 
 		const ui = {
 			rows: [
-				{rows: [headerStatusesDt, statusesDt]},
-				{},
-				{rows: [headerActivityTypeDt, activityTypeDt]},
-				{},
 				{
 					cols: [
 						{},
 						settingsBtns
 					]
-				}
+				},
+				{rows: [headerStatusesDt, statusesDt]},
+				{maxHeight: spacerMaxWidth},
+				{rows: [headerActivityTypeDt, activityTypeDt]}
+				// {}
 			]
 		};
 

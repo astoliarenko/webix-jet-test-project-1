@@ -41,7 +41,7 @@ export default {
 	EN: "Англ",
 	"not correct": "не корректно",
 	"Unknown status": "Неизвестный статус",
-	"type to find matching contacts": "тип для поиска сравнения контактов",
+	"type to find matching contacts": "введите для поиска нужного контакта",
 	"Cannot be empty": "Не может быть пустым",
 	All: "Все",
 	Overdue: "Просроченные",
@@ -58,5 +58,6 @@ export default {
 	"Delete this file?": "Удалить этот файл?",
 	Size: "Размер",
 	"Change date": "Изменить дату",
-	"Edit contact": "Редактировать контакт"
+	"Edit contact": "Редактировать контакт",
+	"Delete this contact and related activities, files?": "Удалить контакт и все связанные с ним активности и файлы?"
 };

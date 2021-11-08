@@ -22,7 +22,14 @@ if (!BUILD_AS_MODULE) {
 	// webix.debug({events: true});
 	webix.ready(() => {
 		app.render();
-		app.use(plugins.Locale);
+		app.use(plugins.Locale, {
+			// The Locale plugin has the additional setting
+			// for using Webix locales alongside with the Jet app locale.
+			webix: {
+				en: "en-US",
+				ru: "ru-RU"
+			}
+		});
 		app.attachEvent("app:error:resolve", () => {
 			webix.delay(() => app.show(app.config.start));
 		});

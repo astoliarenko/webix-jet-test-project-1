@@ -23,6 +23,7 @@ export default class ContactsView extends JetView {
 		const btnAddContact = {
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
 			view: "button",
+			css: "webix_primary",
 			type: "icon",
 			icon: "webix_icon wxi-plus",
 			label: _("Add contact"),
@@ -82,12 +83,9 @@ export default class ContactsView extends JetView {
 		const filterValue = contactsFilter.getValue().toLowerCase().trim();
 		const keys = ["FirstName", "LastName", "Job", "Company", "Website", "Address", "Email", "Skype"];
 		contactsList.filter((obj) => {
-			let match = false;
-			keys.forEach((key) => {
-				if (obj[key].toString().toLowerCase().indexOf(filterValue) !== -1) match = true;
-			});
-			// console.log("match=", match);
-			if (match) return true;
+			// let match = false;
+			keys.forEach(key => obj[key].toString().toLowerCase().indexOf(filterValue) !== -1);
+			// if (match) return true;
 			if (obj.Birthday && (filterValue.length === 5)) {
 				const filterYear = +filterValue.slice(1);
 				if (!Number.isNaN(filterYear)) {
@@ -95,14 +93,11 @@ export default class ContactsView extends JetView {
 					const condition = filterValue[0];
 					switch (condition) {
 						case "<":
-							if (birthdayYear < filterYear) match = true;
-							break;
+							return birthdayYear < filterYear;
 						case ">":
-							if (birthdayYear > filterYear) match = true;
-							break;
+							return birthdayYear > filterYear;
 						case "=":
-							if (birthdayYear === filterYear) match = true;
-							break;
+							return birthdayYear === filterYear;
 						default: break;
 					}
 				}
@@ -115,7 +110,7 @@ export default class ContactsView extends JetView {
 				}
 			}
 
-			return match;
+			return false;
 		});
 		contactsList.select(contactsList.getFirstId());
 	}

@@ -8,6 +8,9 @@ export default class ActivitiesView extends JetView {
 	config() {
 		const _ = this.app.getService("locale")._;
 
+		// const spacerMaxWidth = 400;
+		// const tabbarMaxWidth = 1000;
+
 		this.tabbarValue = "all";
 
 		const btnAdd = {
@@ -15,6 +18,7 @@ export default class ActivitiesView extends JetView {
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
 			view: "button",
 			value: _("Add activity"),
+			css: "webix_primary",
 			click: () => {
 				this.window.showWindow();
 			}
@@ -23,6 +27,7 @@ export default class ActivitiesView extends JetView {
 		const table = new ActivitiesTableView(this.app);
 
 		const activitiesTabbar = {
+			// maxWidth: tabbarMaxWidth,
 			borderless: true,
 			localId: constants.ACTIVITIES_VIEW.VIEW_IDS.TABBAR_ID,
 			view: "tabbar",
@@ -56,8 +61,8 @@ export default class ActivitiesView extends JetView {
 						btnAdd
 					]
 				},
-				{css: "bg-white", cols: [activitiesTabbar, {}]},
-				// activitiesTabbar,
+				// {css: "bg-white", cols: [activitiesTabbar, {maxWidth: spacerMaxWidth}]},
+				activitiesTabbar,
 				table
 			]
 		};
@@ -67,11 +72,5 @@ export default class ActivitiesView extends JetView {
 
 	init() {
 		this.window = this.ui(EditWindowView);
-		// this.on(this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.TABBAR_ID),
-		// 	constants.EVENTS.GET_SELECTED_TAB,
-		// 	() => {
-		// 		console.log("this.tabbarValue", this.tabbarValue);
-		// 		return this.tabbarValue;
-		// 	});
 	}
 }

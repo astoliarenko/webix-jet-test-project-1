@@ -28,6 +28,7 @@ export default class ContactsDetailsView extends JetView {
 		const btnEdit = {
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
 			view: "button",
+			css: "webix_primary",
 			type: "icon",
 			icon: "webix_icon wxi-pencil",
 			label: _("Edit"),
@@ -37,6 +38,7 @@ export default class ContactsDetailsView extends JetView {
 		const btnAddActivity = {
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
 			view: "button",
+			css: "webix_primary",
 			type: "icon",
 			icon: "webix_icon wxi-plus",
 			label: _("Add activity"),
@@ -151,7 +153,8 @@ export default class ContactsDetailsView extends JetView {
 	}
 
 	deleteContact() {
-		webix.confirm("Delete this contact and related activities, files?").then(() => {
+		const _ = this.app.getService("locale")._;
+		webix.confirm(_("Delete this contact and related activities, files?")).then(() => {
 			contactsCollection.remove(this.contactId);
 
 			activitiesCollection.data.each((activity) => {

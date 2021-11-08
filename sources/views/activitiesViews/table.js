@@ -97,7 +97,7 @@ export default class ActivitiesTableView extends JetView {
 			},
 			on: {
 				onAfterFilter: () => {
-					this.filterTable(this.contactId);
+					this.filterDtByContact(this.contactId);
 					setTimeout(() => {
 						this.filterDtByTabbar(this.tabbarValue);
 					}, 50);
@@ -117,52 +117,47 @@ export default class ActivitiesTableView extends JetView {
 
 		if (tabbarId) {
 			this.tabbarValue = tabbarId;
-			const currentDateObj = new Date();
-			const currentDateStr = webix.Date
-				.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(currentDateObj);
-			const currentDateInMSec = Date.parse(currentDateObj);
-			const currentDay = currentDateObj.getDay() - 1;
-			const oneDayInMSec = 86400000;
-			// 1000 * 60 * 60 * 24 = 86400000 = 1 day in msec
-			const tomorrowDateObj = new Date(currentDateInMSec + oneDayInMSec);
-			const currentMonth = currentDateObj.getMonth();
-			const startCurWeekObj = new Date(currentDateInMSec - oneDayInMSec * currentDay);
-			const startCurWeekStr = webix.Date
-				.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(startCurWeekObj);
-			const endCurWeekObj = new Date(currentDateInMSec + oneDayInMSec * (7 - currentDay));
-			const endCurWeekStr = webix.Date
-				.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(endCurWeekObj);
+
+			// webix.Date.dayStart(obj.DateObj) откинуть время
+			// object add(object date,number inc,string mode, [boolean copy] );
+
 			const matchItem = (obj) => {
-				const activityDateStr = obj.DueDate.slice(0, 10);
-				// eslint-disable-next-line default-case
 				switch (tabbarId) {
 					case "overdue":
-						return obj.DateObj < currentDateObj;
+						return obj.DateObj < new Date() && obj.State === "Open";
 					case "completed":
 						return obj.State === "Close";
 					case "today":
-						// eslint-disable-next-line no-case-declarations
-						return activityDateStr === currentDateStr;
-					case "tomorrow":
 						return (webix.Date
-							.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(tomorrowDateObj)
-							.slice(0, 10) === activityDateStr);
+							.equal(webix.Date.dayStart(new Date()), webix.Date.dayStart(obj.DateObj)));
+					case "tomorrow":
+						return webix.Date.equal(webix.Date.add(webix.Date.dayStart(new Date()), 1, "day", true), webix.Date.dayStart(obj.DateObj));
 					case "thisWeek":
-						return (startCurWeekStr <= activityDateStr) && (activityDateStr < endCurWeekStr);
+						// start week - Sunday, end - Saturday, оставил как в дейтпикере
+						// eslint-disable-next-line no-case-declarations
+						const startWeek = webix.Date.weekStart(webix.Date.dayStart(new Date()));
+						// eslint-disable-next-line no-case-declarations
+						const endWeek = webix.Date.add(startWeek, 6, "day", true);
+						// eslint-disable-next-line no-case-declarations
+						const date = webix.Date.dayStart(obj.DateObj);
+						return (startWeek < date && date <= endWeek);
+						// return (startWeek < obj.DateObj && obj.DateObj < endWeek);
 					case "thisMonth":
-						if (obj.DateObj) return obj.DateObj.getMonth() === currentMonth;
-						break;
+						// eslint-disable-next-line no-case-declarations
+						const curDate = new Date();
+						return (obj.DateObj.getMonth() === curDate.getMonth()
+							&& obj.DateObj.getFullYear() === curDate.getFullYear());
+					case "all":
+					default:
+						return obj;
 				}
-				return obj;
 			};
 
-			// table.filter(obj => matchItem(obj), null, false);
 			table.filter(obj => matchItem(obj), null, true);
 		}
-		// else table.filter(obj => obj, null, true);
 	}
 
-	filterTable(id) {
+	filterDtByContact(id) {
 		// 	if third param in .filter() set to true, each next filtering criteria
 		// will be applied to the already filtered list
 		const table = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.DATATABLE_ID);
@@ -181,7 +176,7 @@ export default class ActivitiesTableView extends JetView {
 			.then(() => {
 				this.contactId = this.getParam("id");
 				view.filterByAll();
-				this.filterTable(this.contactId);
+				this.filterDtByContact(this.contactId);
 			});
 	}
 
@@ -197,21 +192,21 @@ export default class ActivitiesTableView extends JetView {
 		// 	}
 		// };
 		this.on(activitiesCollection, "onAfterAdd", () => {
-			this.filterTable(this.contactId);
+			this.filterDtByContact(this.contactId);
 			if (!this.contactId) {
 				view.filterByAll();
 				this.filterDtByTabbar(this.tabbarValue);
 			}
 		});
 		this.on(activitiesCollection, "onAfterDelete", () => {
-			this.filterTable(this.contactId);
+			this.filterDtByContact(this.contactId);
 			if (!this.contactId) {
 				view.filterByAll();
 				this.filterDtByTabbar(this.tabbarValue);
 			}
 		});
 		this.on(activitiesCollection, "onDataUpdate", () => {
-			this.filterTable(this.contactId);
+			this.filterDtByContact(this.contactId);
 			if (!this.contactId) {
 				view.filterByAll();
 				this.filterDtByTabbar(this.tabbarValue);
