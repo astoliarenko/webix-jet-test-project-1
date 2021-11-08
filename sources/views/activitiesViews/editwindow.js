@@ -25,12 +25,7 @@ export default class EditWindowView extends JetView {
 			width: btnWidth,
 			localId: constants.EDIT_WINDOW_VIEW.VIEW_IDS.BTN_CANCEL_ID,
 			value: _("Cancel"),
-			click: () => {
-				const form = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.FORM_ID);
-				form.clear();
-				form.clearValidation();
-				this.getRoot().hide();
-			}
+			click: () => this.hideWindow()
 		};
 
 		const checkbox = {
@@ -122,13 +117,12 @@ export default class EditWindowView extends JetView {
 
 	// eslint-disable-next-line consistent-return
 	saveActivity() {
-		const form = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.FORM_ID);
-		const formValues = form.getValues();
+		const formValues = this.form.getValues();
 
-		if (!form.validate()) return false;
+		if (!this.form.validate()) return false;
 
-		if (!form.isDirty()) {
-			form.clear();
+		if (!this.form.isDirty()) {
+			this.form.clear();
 			this.getRoot().hide();
 			return false;
 		}
@@ -153,8 +147,12 @@ export default class EditWindowView extends JetView {
 		}
 		else activitiesCollection.add(formValues);
 
-		form.clear();
-		form.clearValidation();
+		this.hideWindow();
+	}
+
+	hideWindow() {
+		this.form.clear();
+		this.form.clearValidation();
 		this.getRoot().hide();
 	}
 
@@ -166,7 +164,6 @@ export default class EditWindowView extends JetView {
 
 		const header = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.HEADER_ID);
 		const btnSave = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.BTN_SAVE_ID);
-		const form = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.FORM_ID);
 		const richselectContact = this.$$(constants.ACTIVITIES_VIEW.VIEW_IDS.RICHSELECT_CONTACT_ID);
 		const headerText = activity ? _("Edit activity") : _("Add activity");
 		const btnName = activity ? _("Save") : _("Add");
@@ -179,21 +176,25 @@ export default class EditWindowView extends JetView {
 		btnSave.refresh();
 
 		if (!activityId && contactId) {
-			form.setValues({ContactID: contactsCollection.getItem(contactId)});
+			this.form.setValues({ContactID: contactsCollection.getItem(contactId)});
 			richselectContact.disable();
 		}
 		else if (activityId && contactId) {
-			form.setValues(activityCopy);
+			this.form.setValues(activityCopy);
 			richselectContact.disable();
 		}
 		else if (activityId) {
-			form.setValues(activityCopy);
+			this.form.setValues(activityCopy);
 		}
 		else {
-			form.clear();
-			form.clearValidation();
+			this.form.clear();
+			this.form.clearValidation();
 		}
 
 		this.getRoot().show();
+	}
+
+	init() {
+		this.form = this.$$(constants.EDIT_WINDOW_VIEW.VIEW_IDS.FORM_ID);
 	}
 }

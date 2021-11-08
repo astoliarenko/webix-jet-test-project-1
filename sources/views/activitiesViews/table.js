@@ -133,23 +133,22 @@ export default class ActivitiesTableView extends JetView {
 					case "tomorrow":
 						return webix.Date.equal(webix.Date.add(webix.Date.dayStart(new Date()), 1, "day", true), webix.Date.dayStart(obj.DateObj));
 					case "thisWeek":
-						// start week - Sunday, end - Saturday, оставил как в дейтпикере
-						// eslint-disable-next-line no-case-declarations
+					// start week - Sunday, end - Saturday, оставил как в дейтпикере
+					{
 						const startWeek = webix.Date.weekStart(webix.Date.dayStart(new Date()));
-						// eslint-disable-next-line no-case-declarations
 						const endWeek = webix.Date.add(startWeek, 6, "day", true);
-						// eslint-disable-next-line no-case-declarations
-						const date = webix.Date.dayStart(obj.DateObj);
-						return (startWeek < date && date <= endWeek);
-						// return (startWeek < obj.DateObj && obj.DateObj < endWeek);
+						return (startWeek <= obj.DateObj && obj.DateObj <= endWeek);
+					}
 					case "thisMonth":
-						// eslint-disable-next-line no-case-declarations
+					{
 						const curDate = new Date();
 						return (obj.DateObj.getMonth() === curDate.getMonth()
 							&& obj.DateObj.getFullYear() === curDate.getFullYear());
+					}
 					case "all":
 					default:
-						return obj;
+						return true;
+						// table.filter();
 				}
 			};
 

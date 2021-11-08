@@ -102,15 +102,21 @@ export default class ContactsView extends JetView {
 				return false;
 			}
 			let match = false;
-			keys.forEach((key) => {
-				if (obj[key].toString().toLowerCase().indexOf(filterValue) !== -1) {
+			// keys.forEach((key) => {
+			// 	if (obj[key].toString().toLowerCase().indexOf(filterValue) !== -1) {
+			// 		match = true;
+			// 		return true;
+			// 	}
+			// 	return false;
+			// });
+			for (let i = 0; i < keys.length; i++) {
+				if (obj[keys[i]].toString().toLowerCase().indexOf(filterValue) !== -1) {
 					match = true;
-					return true;
+					break;
 				}
-				return false;
-			});
+			}
 			if (match) return true;
-			if (filterValue.indexOf(obj.Phone) !== -1) return true;
+			if (obj.Phone && filterValue.indexOf(obj.Phone) !== -1) return true;
 			if (obj.StatusID) {
 				const status = statusesCollection.getItem(obj.StatusID);
 				if (status && status.Value.toLowerCase().indexOf(filterValue) !== -1) {

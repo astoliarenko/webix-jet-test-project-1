@@ -27,12 +27,7 @@ export default class AddWindowView extends JetView {
 			width: btnWidth,
 			// localId: ,
 			label: _("Cancel"),
-			click: () => {
-				const form = this.$$(constants.SETTINGS_VIEW.VIEW_IDS.FORM_ID);
-				form.clear();
-				form.clearValidation();
-				this.getRoot().hide();
-			}
+			click: () => this.hideWindow()
 		};
 
 		const form = {
@@ -91,19 +86,26 @@ export default class AddWindowView extends JetView {
 
 	// eslint-disable-next-line consistent-return
 	save() {
-		const form = this.$$(constants.SETTINGS_VIEW.VIEW_IDS.FORM_ID);
-		const formValues = form.getValues();
+		const formValues = this.form.getValues();
 
-		if (!form.validate()) return false;
+		if (!this.form.validate()) return false;
 
 		this.dataCollection.add(formValues);
 
-		form.clear();
-		form.clearValidation();
+		this.hideWindow();
+	}
+
+	hideWindow() {
+		this.form.clear();
+		this.form.clearValidation();
 		this.getRoot().hide();
 	}
 
 	showWindow() {
 		this.getRoot().show();
+	}
+
+	init() {
+		this.form = this.$$(constants.SETTINGS_VIEW.VIEW_IDS.FORM_ID);
 	}
 }

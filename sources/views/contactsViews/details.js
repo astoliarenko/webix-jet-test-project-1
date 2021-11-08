@@ -108,12 +108,14 @@ export default class ContactsDetailsView extends JetView {
 	}
 
 	renderContactDetails({FirstName, LastName, Photo, StatusID,
-		Email, Skype, Job, Company, Birthday}) {
+		Email, Skype, Job, Company, BirthObj}) {
 		const photoUrl = Photo || "./sources/img/man.png";
 		const item = statusesCollection.getItem(StatusID);
 		const Status = item ? item.Value : "unknown";
 		let birthday;
-		if (Birthday) birthday = Birthday.length === 10 ? Birthday : Birthday.slice(0, 10);
+
+		if (BirthObj) birthday = webix.Date.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(BirthObj);
+
 		const res = `
 			<div class='details_container df f-d-col'>
 				<h2 class='details_header'>${FirstName} ${LastName}</h2>

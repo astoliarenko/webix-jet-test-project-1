@@ -41,7 +41,7 @@ export default {
 	EN: "Англ",
 	"not correct": "не корректно",
 	"Unknown status": "Неизвестный статус",
-	"type to find matching contacts": "введите для поиска нужного контакта",
+	"type to find matching contacts": "искать контакты",
 	"Cannot be empty": "Не может быть пустым",
 	All: "Все",
 	Overdue: "Просроченные",
