@@ -7,9 +7,9 @@ import AddWindowView from "./settingsViews/window";
 
 export default class SettingsView extends JetView {
 	config() {
-		const param = this.app.getService("locale");
-		const _ = param._;
-		const language = param.getLang();
+		const locale = this.app.getService("locale");
+		const _ = locale._;
+		const language = locale.getLang();
 
 		const settingsBtnsWidth = 100;
 		const spacerMaxWidth = 50;
@@ -25,7 +25,7 @@ export default class SettingsView extends JetView {
 				{id: "en", value: _("EN")}
 			],
 			click() {
-				param.setLang(this.getValue());
+				locale.setLang(this.getValue());
 			}
 		};
 
