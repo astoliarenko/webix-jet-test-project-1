@@ -83,12 +83,18 @@ export default class ContactsView extends JetView {
 		const filterValue = contactsFilter.getValue().toLowerCase().trim();
 		const keys = ["FirstName", "LastName", "Job", "Company", "Website", "Address", "Email", "Skype"];
 		contactsList.filter((obj) => {
-			// let match = false;
-			keys.forEach(key => obj[key].toString().toLowerCase().indexOf(filterValue) !== -1);
-			// if (match) return true;
+			let match = false;
+			keys.forEach((key) => {
+				if (obj[key].toString().toLowerCase().indexOf(filterValue) !== -1) {
+					match = true;
+					return true;
+				}
+				return false;
+			});
+			if (match) return true;
 			if (obj.Birthday && (filterValue.length === 5)) {
 				const filterYear = +filterValue.slice(1);
-				if (!Number.isNaN(filterYear)) {
+				if (!Number.isNaN(filterYear) && filterYear > 1969 && filterYear < 2040) {
 					const birthdayYear = obj.BirthObj.getFullYear();
 					const condition = filterValue[0];
 					switch (condition) {
@@ -102,7 +108,7 @@ export default class ContactsView extends JetView {
 					}
 				}
 			}
-			if (obj.Phone && (obj.Phone === filterValue)) return true;
+			if (filterValue.indexOf(obj.Phone) !== -1) return true;
 			if (obj.StatusID) {
 				const status = statusesCollection.getItem(obj.StatusID);
 				if (status && status.Value.toLowerCase().indexOf(filterValue) !== -1) {
