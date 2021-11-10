@@ -11,30 +11,37 @@ import ContactsFilesView from "./files";
 
 export default class ContactsDetailsView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
+		const tableTabbarActivitiesId = "activities";
+		const tableTabbarFilesId = "files";
+
 		const btnDelete = {
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
 			view: "button",
 			type: "icon",
 			icon: "webix_icon wxi-trash",
-			label: "Delete",
+			label: _("Delete"),
 			click: () => this.deleteContact()
 		};
 
 		const btnEdit = {
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
 			view: "button",
+			css: "webix_primary",
 			type: "icon",
 			icon: "webix_icon wxi-pencil",
-			label: "Edit",
+			label: _("Edit"),
 			click: () => this.show(`form?id=${this.contactId}`)
 		};
 
 		const btnAddActivity = {
 			width: constants.CONTACTS_VIEW.BTN_WIDTH,
 			view: "button",
+			css: "webix_primary",
 			type: "icon",
 			icon: "webix_icon wxi-plus",
-			label: "Add Activity",
+			label: _("Add activity"),
 			click: () => this.window.showWindow(null, this.contactId)
 		};
 
@@ -68,9 +75,9 @@ export default class ContactsDetailsView extends JetView {
 		const tableTabbar = {
 			borderless: true,
 			view: "tabbar",
-			options: ["Activities", "Files"],
+			options: [{id: tableTabbarActivitiesId, value: _("Activities")}, {id: tableTabbarFilesId, value: _("Files")}],
 			multiview: true,
-			value: "Activities"
+			value: tableTabbarActivitiesId
 		};
 
 		const ui = {
@@ -82,14 +89,14 @@ export default class ContactsDetailsView extends JetView {
 				{
 					cells: [
 						{
-							id: "Activities",
+							id: tableTabbarActivitiesId,
 							rows: [
 								{$subview: new ActivitiesTableView(this.app, true)},
 								{cols: [{}, btnAddActivity]}
 							]
 						},
 						{
-							id: "Files",
+							id: tableTabbarFilesId,
 							rows: [{$subview: ContactsFilesView}]
 						}
 					]
@@ -101,10 +108,14 @@ export default class ContactsDetailsView extends JetView {
 	}
 
 	renderContactDetails({FirstName, LastName, Photo, StatusID,
-		Email, Skype, Job, Company, Birthday}) {
+		Email, Skype, Job, Company, BirthObj}) {
 		const photoUrl = Photo || "./sources/img/man.png";
 		const item = statusesCollection.getItem(StatusID);
 		const Status = item ? item.Value : "unknown";
+		let birthday;
+
+		if (BirthObj) birthday = webix.Date.dateToStr(constants.ACTIVITIES_VIEW.DATE_FORMAT)(BirthObj);
+
 		const res = `
 			<div class='details_container df f-d-col'>
 				<h2 class='details_header'>${FirstName} ${LastName}</h2>
@@ -133,7 +144,7 @@ export default class ContactsDetailsView extends JetView {
 						</div>
 						<div class='details-item df f-d-row'>
 							<i class="icon-calendar"></i>
-							<span>${Birthday}</span>
+							<span>${birthday}</span>
 						</div>
 					</div>
 				</div>
@@ -144,7 +155,8 @@ export default class ContactsDetailsView extends JetView {
 	}
 
 	deleteContact() {
-		webix.confirm("Delete this contact and related activities, files?").then(() => {
+		const _ = this.app.getService("locale")._;
+		webix.confirm(_("Delete this contact and related activities, files?")).then(() => {
 			contactsCollection.remove(this.contactId);
 
 			activitiesCollection.data.each((activity) => {
